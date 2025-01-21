@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 body {
-  @apply text-base dark:text-white bg-black;
+
+  @apply text-base text-white bg-black;
   font-family: Arial, Helvetica, sans-serif;
 }
 /* Customize the scrollbar track */
