@@ -1,12 +1,12 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-    basePath: 'https://whexberg.github.io/ecv-3/',
+    basePath: '/ecv-3',
     output: 'export',
     images: {
         unoptimized: true,
     },
-    distDir: 'docs',
+    // distDir: 'docs',
     cleanDistDir: true,
 };
 
