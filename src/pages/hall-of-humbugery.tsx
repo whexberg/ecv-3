@@ -15,6 +15,7 @@ export default function AboutPage() {
                     and torchbearers of the indomitable spirit that defines us all.
                 </p>
             </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
                 src="/images/humbugery/Grand+Banquet+Placemat+.jpg"
                 alt="Grand Banquet Placemat"
@@ -75,12 +76,15 @@ export default function AboutPage() {
                     '55+Webster.jpg',
                     '420243720_1524473624760317_6437778988742861386_n.jpg',
                 ].map((image) => (
-                    <img
-                        key={image}
-                        src={`/images/humbugery/${image}`}
-                        className="w-full aspect-square object-cover"
-                        alt={image}
-                    />
+                    <>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                            key={image}
+                            src={`/images/humbugery/${image}`}
+                            className="w-full aspect-square object-cover"
+                            alt={image}
+                        />
+                    </>
                 ))}
             </div>
         </PageSection>

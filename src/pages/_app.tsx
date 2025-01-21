@@ -6,7 +6,6 @@ import { useEffect } from 'react';
 import { Footer } from '@/components/footer';
 import { Header } from '@/components/header';
 import { MainContent } from '@/components/main-content';
-import type { Metadata } from 'next';
 
 const geistSans = Geist({
     variable: '--font-geist-sans',
@@ -17,6 +16,7 @@ const geistMono = Geist_Mono({
     variable: '--font-geist-mono',
     subsets: ['latin'],
 });
+
 export default function MyApp({ Component, pageProps }: AppProps) {
     useEffect(() => {
         // Add multiple classes or use a conditional check
