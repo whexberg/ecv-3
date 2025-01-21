@@ -51,7 +51,7 @@ export default function Home() {
 
             <PageSection title="Mission Statement" id="mission">
                 <div className="flex flex-col gap-4">
-                    <p className="text-lg max-w-5xl mx-auto text-center ">
+                    <p className="text-lg max-w-5xl mx-auto text-center">
                         From the rugged peaks to the dust-choked valleys of the American West, Lord Sholto Douglas,
                         Chapter #3 of E Clampus Vitus, stands as a steadfast guardian of history’s untamed spirit. We
                         are the keepers of legends, the heralds of forgotten pioneers, and the champions of community,

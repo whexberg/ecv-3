@@ -16,7 +16,9 @@ const EventsPage = ({ events }: EventPageProps) => {
     const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
 
     const handlePreviousMonth = () => setCurrentDate(subMonths(currentDate, 1));
-    const handleNextMonth = () => setCurrentDate(addMonths(currentDate, 1));
+    const handleNextMonth = () => {
+        setCurrentDate(addMonths(currentDate, 1));
+    };
 
     // Get the start and end of the current month
     const startOfCurrentMonth = startOfMonth(currentDate);
@@ -36,8 +38,11 @@ const EventsPage = ({ events }: EventPageProps) => {
     return (
         <>
             <h1 className="text-center mb-12 font-bold text-3xl">Events</h1>
-            <div className="grid grid-cols-3 gap-8">
-                <div className="flex justify-start items-center">
+            <div className="flex flex-col justify-between items-center gap-4 lg:flex-row lg:gap-8">
+                <div className="">
+                    <h2 className="text-xl font-bold min-w-56 text-center">{format(currentDate, 'MMMM yyyy')}</h2>
+                </div>
+                <div className="flex gap-4">
                     {isToday(currentDate) || (
                         <button
                             onClick={() => setCurrentDate(new Date())}
@@ -46,17 +51,13 @@ const EventsPage = ({ events }: EventPageProps) => {
                             Go to today
                         </button>
                     )}
-                </div>
-                <div className="flex justify-center items-center">
                     <button onClick={handlePreviousMonth} className="text-xl p-4">
                         {'<'}
                     </button>
-                    <h2 className="text-xl font-bold min-w-56 text-center">{format(currentDate, 'MMMM yyyy')}</h2>
                     <button onClick={handleNextMonth} className="text-xl p-4">
                         {'>'}
                     </button>
                 </div>
-                <div></div>
             </div>
             <div className="flex flex-col lg:flex-row items-start justify-between p-4 gap-4">
                 <div className="w-full lg:w-3/4">
