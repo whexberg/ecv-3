@@ -7,23 +7,23 @@ import Link from 'next/link';
 const sponsors = [
     {
         name: 'Joker from The Cinders',
-        logo: '/images/sponsors/cinders.jpg',
+        logo: './images/sponsors/cinders.jpg',
         link: 'https://www.facebook.com/profile.php?id=100061688721666',
     },
-    { name: 'Holes from Phat Chads', logo: '/images/sponsors/Phatchads+.png', link: 'https://www.phatchads.com/' },
+    { name: 'Holes from Phat Chads', logo: './images/sponsors/Phatchads+.png', link: 'https://www.phatchads.com/' },
     {
         name: 'El Tapatio Restaurant (Sunrise Ave)',
-        logo: '/images/sponsors/ElTapatio-1x.png',
+        logo: './images/sponsors/ElTapatio-1x.png',
         link: 'https://eltapatioca.com/',
     },
     {
         name: 'Cycle Gear (Rancho Cordova)',
-        logo: '/images/sponsors/Cycle_Gear_Logo.png',
+        logo: './images/sponsors/Cycle_Gear_Logo.png',
         link: 'https://www.cyclegear.com/',
     },
     {
         name: "Stoney's Rocking Rodeo",
-        logo: '/images/sponsors/c194cb2331511a39ee0b2a8a68fe6792.png',
+        logo: './images/sponsors/c194cb2331511a39ee0b2a8a68fe6792.png',
         link: 'https://www.stoneyinn.net/',
     },
 ];
@@ -33,7 +33,7 @@ export default function Home() {
         <>
             <PageSection title="Lord Sholto Douglas - E Clampus Vitus Chapter #3" id="title">
                 <Image
-                    src="/images/chapter-logo.jpg"
+                    src="./images/chapter-logo.jpg"
                     width={300}
                     height={300}
                     alt="Lord Sholto Douglas Logo"

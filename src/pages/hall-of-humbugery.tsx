@@ -17,7 +17,7 @@ export default function AboutPage() {
             </div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-                src="/images/humbugery/Grand+Banquet+Placemat+.jpg"
+                src="./images/humbugery/Grand+Banquet+Placemat+.jpg"
                 alt="Grand Banquet Placemat"
                 className="w-full pb-12"
             />
@@ -80,7 +80,7 @@ export default function AboutPage() {
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                             key={image}
-                            src={`/images/humbugery/${image}`}
+                            src={`./images/humbugery/${image}`}
                             className="w-full aspect-square object-cover"
                             alt={image}
                         />
