@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     images: {
         unoptimized: true,
     },
-    distDir: 'build',
+    distDir: 'gh-pages',
     cleanDistDir: true,
 };
 
