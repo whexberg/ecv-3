@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply text-base text-[#171717] dark:text-[#ededed] bg-background dark:bg-dk_background;
+  font-family: Arial, Helvetica, sans-serif;
+}
+/* Customize the scrollbar track */
+::-webkit-scrollbar {
+  width: 12px; /* Width of the scrollbar */
+  height: 12px; /* Height of the scrollbar (for horizontal scroll) */
+}
+
+/* Customize the scrollbar thumb (the draggable part) */
+::-webkit-scrollbar-thumb {
+  background-color: #d32f2f; /* A red shade for the thumb */
+  border-radius: 6px; /* Rounded corners */
+  border: 3px solid #000000; /* Adds padding around the thumb */
+}
+
+/* Customize the scrollbar track (the background area) */
+::-webkit-scrollbar-track {
+  background: #2c2c2c; /* A dark background */
+  border-radius: 6px;
+}
+
+/* Optional: Hover state for the scrollbar thumb */
+::-webkit-scrollbar-thumb:hover {
+  background: #b71c1c; /* Slightly darker shade of red when hovered */
+}
