@@ -3,6 +3,7 @@
 import PageSection from '@/components/page-section';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Button } from '@/components/button';
 
 const sponsors = [
     {
@@ -39,12 +40,83 @@ export default function Home() {
                     alt="Lord Sholto Douglas Logo"
                     className="mx-auto"
                 />
+            </PageSection>
+
+            <PageSection title="The 43rd Annual Bean Feed and Hawkers' Faire" id="beanfeed">
+                <Image
+                    src="./images/bean-feed.jpg"
+                    width={0}
+                    height={0}
+                    alt={`Bean Feed`}
+                    className="w-full max-w-xl group-hover:opacity-5 mx-auto"
+                />
+
+                <div className="flex justify-center gap-4 mt-8">
+                    <Button link href="https://link.clover.com/urlshortener/7LQ5kM" newTab>
+                        Prepay NOW!
+                    </Button>
+                </div>
+                <div className="flex flex-col justify-center gap-4 mt-8 max-w-3xl mx-auto">
+                    <div className="flex flex-col gap-1 ">
+                        <p>📅 Date: Feb 8, 6030 (2025)</p>
+                        <p>📍 Location: [Insert Event Location]</p>
+                        <p>💰 Cost: $35</p>
+                    </div>
+
+                    <p>
+                        Brothers, gather ‘round and prepare for an event so monumental, so flavorful, and so profoundly
+                        absurd that it could only come from the hallowed halls of the Lord Sholto Douglas #3 Chapter of
+                        E Clampus Vitus. This year’s Great Bean Feed promises to be a culinary triumph, paying homage to
+                        the chapter’s namesake while fortifying our spirits (and our bellies) with history, humor, and a
+                        healthy heap of beans.
+                    </p>
+
+                    <p>
+                        Under the benevolent leadership of Budman Also, Noble Grand Humbug Extraordinaire, the Lord
+                        Sholto Douglas #3 Chapter has outdone itself, crafting a celebration worthy of the greatest
+                        Clampers—and the hungriest jackasses—of all time.
+                    </p>
+
+                    <p className="text-xl font-bold">What Awaits:</p>
+                    <div className="flex flex-col gap-4 px-0 sm:px-12">
+                        <div>
+                            <p className="font-bold">Beans Beyond Compare</p>
+                            Simmered to perfection in kettles the size of a miner’s ambition, some of these beans are
+                            said to be seasoned with a secret spice blend, whispered to Joe Zumwalt by a ghostly
+                            prospector while visiting a forgotten Clamper plaque.
+                        </div>
+                        <div>
+                            <p className="font-bold">Epic Accompaniments</p>
+                            From slabs of cornbread thicker than a Clamper’s wallet after payday to sausages that have
+                            been declared historically significant in their own right, no plate shall be left empty.
+                        </div>
+                        <div>
+                            <p className="font-bold">Raucous Revelry</p>
+                            Expect tall tales, hearty laughter, and perhaps a spontaneous reenactment of the Double
+                            Reverse Jackass Salute, should the crowd be deemed worthy.
+                        </div>
+                    </div>
+                    <p>
+                        So grab your red shirts, polish your black hats, and prepare for an event that will go down in
+                        Clamper history as one of the finest displays of fraternal absurdity. Long live the Lord Sholto
+                        Douglas #3 Chapter, and long may our beans simmer!
+                    </p>
+
+                    <div className="flex justify-center gap-4 mt-8">
+                        <Button link href="https://link.clover.com/urlshortener/7LQ5kM" newTab>
+                            Prepay NOW!
+                        </Button>
+                    </div>
+                </div>
+            </PageSection>
+
+            <PageSection title="Quick Links" id="quick-links">
                 <div className="flex justify-center gap-4 mt-8">
                     <Link href="/board-members" className="border-2 border-primary px-6 py-4 hover:bg-primary">
                         View the Board
                     </Link>
-                    <Link href="/events" className="border-2 border-primary px-6 py-4 hover:bg-primary">
-                        View Events
+                    <Link href="/calendar" className="border-2 border-primary px-6 py-4 hover:bg-primary">
+                        Calendar
                     </Link>
                 </div>
             </PageSection>
