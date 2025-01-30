@@ -1,0 +1,35 @@
+version: '3'
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: ./docker/frontend/${ENVIRONMENT}/Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - .:/usr/app
+    networks:
+      - local_net
+
+  nginx:
+    image: nginx:latest
+#    build:
+#      context: .
+#      dockerfile: ./docker/nginx/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./conf/letsencrypt/:/etc/letsencrypt:ro
+      - ./conf/nginx/:/etc/nginx:ro
+      - ./logs/nginx/:/var/log/nginx
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - frontend
+    networks:
+      - local_net
+
+networks:
+  local_net:
+    driver: bridge

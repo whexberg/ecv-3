@@ -1,0 +1,10 @@
+.idea/
+.next/                # Existing Next.js builds
+.notes/
+conf/nginx/           # We'll create this directory soon
+.git/
+.gitignore
+.dockerignore
+Dockerfile
+docker-compose.yml
+node_modules/         # Installed inside container

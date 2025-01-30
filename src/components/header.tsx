@@ -6,7 +6,7 @@ const links = [
     { href: '/', text: 'Home' },
     { href: '/hall-of-humbugery', text: 'Hall of Humbugery' },
     { href: '/board-members', text: 'Board Members' },
-    { href: '/events', text: 'Events' },
+    { href: '/calendar', text: 'Calendar' },
     // { href: '/contact', text: 'Contact' },
 ] as const;
 

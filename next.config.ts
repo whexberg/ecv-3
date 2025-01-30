@@ -4,7 +4,7 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
     // basePath: isProd ? '/ecv-3' : undefined,
-    output: 'export',
+    // output: 'export',
     images: {
         unoptimized: true,
     },
