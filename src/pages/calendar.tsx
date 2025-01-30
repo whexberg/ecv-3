@@ -46,7 +46,7 @@ const EventsPage = ({ events }: EventPageProps) => {
                     {isToday(currentDate) || (
                         <button
                             onClick={() => setCurrentDate(new Date())}
-                            className="border px-4 py-2 hover:bg-primary "
+                            className="border px-4 py-2 hover:bg-red-700 "
                         >
                             Go to today
                         </button>
@@ -73,7 +73,7 @@ const EventsPage = ({ events }: EventPageProps) => {
                         {daysInMonth.map((day: Date) => (
                             <div
                                 key={day.toISOString()}
-                                className={`h-32 overflow-hidden cursor-pointer p-2 ${isToday(day) ? 'bg-primary text-white' : 'hover:bg-primary'}`}
+                                className={`h-32 overflow-hidden cursor-pointer p-2 ${isToday(day) ? 'bg-red-700 text-white' : 'hover:bg-red-700'}`}
                                 onClick={() => setSelectedDate(day)}
                             >
                                 {format(day, 'd')}
@@ -87,8 +87,8 @@ const EventsPage = ({ events }: EventPageProps) => {
                                                     key={event.title}
                                                     className={
                                                         isToday(date)
-                                                            ? 'text-xs bg-white text-primary px-1.5 py-0.5'
-                                                            : 'text-xs bg-primary text-white px-1.5 py-0.5'
+                                                            ? 'text-xs bg-white text-red-700 px-1.5 py-0.5'
+                                                            : 'text-xs bg-red-700 text-white px-1.5 py-0.5'
                                                     }
                                                 >
                                                     <div className="font-bold hidden lg:block">{event.title}</div>
@@ -100,7 +100,7 @@ const EventsPage = ({ events }: EventPageProps) => {
                                             return (
                                                 <div
                                                     key={event.title}
-                                                    className="text-xs font-bold bg-primary text-white px-0.5 lg:px-1.5 py-0.5"
+                                                    className="text-xs font-bold bg-red-700 text-white px-0.5 lg:px-1.5 py-0.5"
                                                 >
                                                     <p className="hidden lg:block">{arr.length - 2} more...</p>
                                                     <p className="block lg:hidden">+{arr.length - 2}</p>

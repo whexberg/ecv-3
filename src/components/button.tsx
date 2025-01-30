@@ -13,7 +13,7 @@ export type ButtonProps =
       };
 
 export const Button = (props: PropsWithChildren<ButtonProps>) => {
-    const classNames = 'block border-2 bg-red-800 border-primary px-6 py-4 hover:bg-primary';
+    const classNames = 'block border-2 bg-red-800 border-red-700 px-6 py-4 hover:bg-red-700';
 
     if (props.link)
         return (

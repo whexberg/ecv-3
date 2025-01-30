@@ -21,7 +21,7 @@ export const Header = () => {
     }, [isOpen]);
 
     return (
-        <header className="bg-primary text-white py-4">
+        <header className="bg-red-700 text-white py-4">
             <div className="container mx-auto px-4 flex items-center justify-between">
                 <h1 className="text-2xl font-bold">Lord Sholto Douglas, ECV Chapter #3</h1>
 
@@ -39,7 +39,7 @@ export const Header = () => {
 
             {/* Side Menu */}
             <div
-                className={`fixed top-0 z-50 right-0 w-64 h-full bg-primary text-white transform transition-transform duration-300 ${
+                className={`fixed top-0 z-50 right-0 w-64 h-full bg-red-700 text-white transform transition-transform duration-300 ${
                     isOpen ? 'translate-x-0' : 'translate-x-full'
                 }`}
             >
