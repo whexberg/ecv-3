@@ -3,9 +3,9 @@ import '../globals.css';
 import type { AppProps } from 'next/app';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { useEffect } from 'react';
-import { Footer } from '@/components/footer';
-import { Header } from '@/components/header';
-import { MainContent } from '@/components/main-content';
+import { Footer } from '../components/footer';
+import { Header } from '../components/header';
+import { MainContent } from '../components/main-content';
 
 const geistSans = Geist({
     variable: '--font-geist-sans',
@@ -28,7 +28,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     }, []);
 
     return (
-        <div className="antialiased flex flex-col min-h-screen">
+        <div className="antialiased flex flex-col min-h-screen border-2 border-gray-200">
             <Header />
             <MainContent>
                 <Component {...pageProps} />

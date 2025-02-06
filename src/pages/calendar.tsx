@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { addMonths, eachDayOfInterval, endOfMonth, format, isToday, parse, startOfMonth, subMonths } from 'date-fns';
 import { GetStaticProps } from 'next';
-import { CalendarEvent, loadEvents } from '@/data/load-events';
+import { CalendarEvent, loadEvents } from '../data/load-events';
 
 type EventPageProps = {
     events: Record<string, CalendarEvent[]>;
@@ -46,7 +46,7 @@ const EventsPage = ({ events }: EventPageProps) => {
                     {isToday(currentDate) || (
                         <button
                             onClick={() => setCurrentDate(new Date())}
-                            className="border px-4 py-2 hover:bg-red-700 "
+                            className="border px-4 py-2 hover:bg-red-800 "
                         >
                             Go to today
                         </button>
@@ -70,49 +70,60 @@ const EventsPage = ({ events }: EventPageProps) => {
 
                         {renderedBuffer}
 
-                        {daysInMonth.map((day: Date) => (
-                            <div
-                                key={day.toISOString()}
-                                className={`h-32 overflow-hidden cursor-pointer p-2 ${isToday(day) ? 'bg-red-700 text-white' : 'hover:bg-red-700'}`}
-                                onClick={() => setSelectedDate(day)}
-                            >
-                                {format(day, 'd')}
-                                <div className="flex flex-col gap-1">
-                                    {events[format(day, 'yyyy-MM-dd')]?.map((event, idx, arr) => {
-                                        if (idx < 2) {
-                                            const date = parse(event.date, 'yyyy-MM-dd', new Date());
+                        {daysInMonth.map((day: Date) => {
+                            const dateStr = format(day, 'yyyy-MM-dd');
+                            const daysEvents =
+                                events[dateStr]?.sort((a, b) => {
+                                    const fmt = 'yyyy-MM-dd hh:mma';
+                                    const t1 = parse(`${dateStr} ${a.times?.start}`, fmt, new Date());
+                                    const t2 = parse(`${dateStr} ${b.times?.start}`, fmt, new Date());
+                                    return t1.getTime() - t2.getTime();
+                                }) || [];
 
-                                            return (
-                                                <div
-                                                    key={event.title}
-                                                    className={
-                                                        isToday(date)
-                                                            ? 'text-xs bg-white text-red-700 px-1.5 py-0.5'
-                                                            : 'text-xs bg-red-700 text-white px-1.5 py-0.5'
-                                                    }
-                                                >
-                                                    <div className="font-bold hidden lg:block">{event.title}</div>
-                                                </div>
-                                            );
-                                        }
+                            return (
+                                <div
+                                    key={day.toISOString()}
+                                    className={`h-32 overflow-hidden cursor-pointer p-2 ${isToday(day) ? 'bg-red-800 text-white' : 'hover:bg-red-800'}`}
+                                    onClick={() => setSelectedDate(day)}
+                                >
+                                    {format(day, 'd')}
+                                    <div className="flex flex-col gap-1">
+                                        {daysEvents.map((event, idx, arr) => {
+                                            if (idx < 2) {
+                                                const date = parse(event.date, 'yyyy-MM-dd', new Date());
 
-                                        if (idx === 2) {
-                                            return (
-                                                <div
-                                                    key={event.title}
-                                                    className="text-xs font-bold bg-red-700 text-white px-0.5 lg:px-1.5 py-0.5"
-                                                >
-                                                    <p className="hidden lg:block">{arr.length - 2} more...</p>
-                                                    <p className="block lg:hidden">+{arr.length - 2}</p>
-                                                </div>
-                                            );
-                                        }
+                                                return (
+                                                    <div
+                                                        key={event.title}
+                                                        className={
+                                                            isToday(date)
+                                                                ? 'text-xs bg-white text-red-800 px-1.5 py-0.5'
+                                                                : 'text-xs bg-red-800 text-white px-1.5 py-0.5'
+                                                        }
+                                                    >
+                                                        <div className="font-bold hidden lg:block">{event.title}</div>
+                                                    </div>
+                                                );
+                                            }
 
-                                        return null;
-                                    })}
+                                            if (idx === 2) {
+                                                return (
+                                                    <div
+                                                        key={event.title}
+                                                        className="text-xs font-bold bg-red-800 text-white px-0.5 lg:px-1.5 py-0.5"
+                                                    >
+                                                        <p className="hidden lg:block">{arr.length - 2} more...</p>
+                                                        <p className="block lg:hidden">+{arr.length - 2}</p>
+                                                    </div>
+                                                );
+                                            }
+
+                                            return null;
+                                        })}
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
                 {(selectedDate && (
@@ -125,8 +136,8 @@ const EventsPage = ({ events }: EventPageProps) => {
                             selectedEvents.map((event, i) => {
                                 return (
                                     <div key={`${event.date}-${i}`} className="border-2 border-white p-4">
-                                        <h2 className="text-xl font-bold text-red-500">{event.title}</h2>
-                                        <div className="mb-2 text-red-500">{event.times?.start}</div>
+                                        <h2 className="text-xl font-bold text-red-800">{event.title}</h2>
+                                        <div className="mb-2 text-red-800">{event.times?.start}</div>
                                         <div className="text-sm">{event.description}</div>
                                     </div>
                                 );

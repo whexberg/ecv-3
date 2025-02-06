@@ -21,14 +21,16 @@ export const Header = () => {
     }, [isOpen]);
 
     return (
-        <header className="bg-red-700 text-white py-4">
+        <header className="bg-red-800 text-white py-4">
             <div className="container mx-auto px-4 flex items-center justify-between">
-                <h1 className="text-2xl font-bold">Lord Sholto Douglas, ECV Chapter #3</h1>
+                <Link href="/">
+                    <h1 className="text-2xl font-bold">Lord Sholto Douglas, ECV Chapter #3</h1>
+                </Link>
 
                 {/* Hamburger Icon */}
                 <button
                     onClick={toggleMenu}
-                    className="z-60 flex flex-col items-center justify-center w-10 h-10 gap-1 "
+                    className="z-40 flex flex-col cursor-pointer items-center justify-center w-10 h-10 gap-1 "
                     aria-label="Toggle Menu"
                 >
                     <span className="block w-6 h-1 bg-white" />
@@ -39,7 +41,7 @@ export const Header = () => {
 
             {/* Side Menu */}
             <div
-                className={`fixed top-0 z-50 right-0 w-64 h-full bg-red-700 text-white transform transition-transform duration-300 ${
+                className={`fixed top-0 z-50 right-0 w-64 h-full bg-red-800 text-white transform transition-transform duration-300 ${
                     isOpen ? 'translate-x-0' : 'translate-x-full'
                 }`}
             >
@@ -66,7 +68,7 @@ export const Header = () => {
             </div>
 
             {/* Background Overlay */}
-            {isOpen && <div onClick={toggleMenu} className="fixed inset-0 bg-black bg-opacity-50 z-40"></div>}
+            {isOpen && <div onClick={toggleMenu} className="fixed inset-0 bg-black/50 z-40"></div>}
         </header>
     );
 };

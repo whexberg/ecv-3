@@ -12,10 +12,24 @@ export type CalendarEvent = {
 };
 
 export async function loadEvents(): Promise<Record<string, CalendarEvent[]>> {
-    const rawEvents: CalendarEvent[] = [
+    let rawEvents: CalendarEvent[] = [
         {
-            date: '2025-12-6',
+            date: '2025-12-06',
             title: '2025 Christmas Fundraiser',
+            description: 'Fundraiser for local orphans.',
+            links: [],
+        },
+        {
+            date: '2025-02-08',
+            times: { start: '7:03AM' },
+            title: "43rd Annual Bean Feed and Hawkers' Faire",
+            description: 'Fundraiser for local orphans.',
+            links: [],
+        },
+        {
+            date: '2025-02-08',
+            times: { start: '6:03PM' },
+            title: 'FAKE EVENT',
             description: 'Fundraiser for local orphans.',
             links: [],
         },
@@ -23,27 +37,28 @@ export async function loadEvents(): Promise<Record<string, CalendarEvent[]>> {
 
     for (let yr = new Date().getFullYear() - 1; yr < new Date().getFullYear() + 1; yr++) {
         for (let mo = 0; mo < 12; mo++) {
-            const { generalMeetingDate, boardMeetingDate } = getMeetingDates(yr, mo);
-            rawEvents.push(
+            const { general, board } = getMeetingDatesAndTimes(yr, mo);
+            rawEvents = [
+                ...rawEvents,
                 {
-                    date: format(boardMeetingDate, 'yyyy-MM-dd'),
-                    times: { start: '7:03pm', end: '8:03pm' },
+                    date: format(board.date, 'yyyy-MM-dd'),
+                    times: { start: board.start, end: board.end },
                     title: 'Board Meeting',
                     description: 'Monthly board meeting.',
                     links: [],
                 },
                 {
-                    date: format(generalMeetingDate, 'yyyy-MM-dd'),
-                    times: { start: '8:03pm', end: '9:03pm' },
+                    date: format(general.date, 'yyyy-MM-dd'),
+                    times: { start: general.start, end: general.end },
                     title: 'General Meeting',
                     description: 'Monthly general meeting for all chapter members.',
                     links: [],
                 },
-            );
+            ];
         }
     }
 
-    return rawEvents.reduce(
+    const reduced = rawEvents.reduce(
         (p, c) => {
             p[c.date] ??= [];
             p[c.date].push(c);
@@ -51,9 +66,11 @@ export async function loadEvents(): Promise<Record<string, CalendarEvent[]>> {
         },
         {} as Record<string, CalendarEvent[]>,
     );
+
+    return reduced;
 }
 
-function getMeetingDates(year: number, month: number) {
+function getMeetingDatesAndTimes(year: number, month: number) {
     const firstDayOfMonth = startOfMonth(new Date(year, month, 1));
 
     // Generate all days of the month
@@ -62,9 +79,15 @@ function getMeetingDates(year: number, month: number) {
         end: addDays(firstDayOfMonth, 30), // Sufficient to cover even the longest months
     });
 
-    // Filter Tuesdays
+    if (year >= 2025 && month > 0) {
+        return {
+            board: { date: daysInMonth.filter((d) => isFriday(d))[0], start: '8:03PM', end: '9:03PM' },
+            general: { date: daysInMonth.filter((d) => isFriday(d))[2], start: '8:03PM', end: '9:03PM' },
+        };
+    }
+
     return {
-        boardMeetingDate: daysInMonth.filter((d) => isTuesday(d))[1],
-        generalMeetingDate: daysInMonth.filter((d) => isFriday(d))[2],
+        board: { date: daysInMonth.filter((d) => isTuesday(d))[1], start: '7:03PM', end: '8:03PM' },
+        general: { date: daysInMonth.filter((d) => isFriday(d))[2], start: '8:03PM', end: '9:03PM' },
     };
 }

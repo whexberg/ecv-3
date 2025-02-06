@@ -1,9 +1,9 @@
 'use client';
 
-import PageSection from '@/components/page-section';
+import PageSection from '../components/page-section';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Button } from '@/components/button';
+import { Button } from '../components/button';
 
 const sponsors = [
     {
@@ -112,10 +112,10 @@ export default function Home() {
 
             <PageSection title="Quick Links" id="quick-links">
                 <div className="flex justify-center gap-4 mt-8">
-                    <Link href="/board-members" className="border-2 border-red-700 px-6 py-4 hover:bg-red-700">
+                    <Link href="/board-members" className="border-2 border-red-800 px-6 py-4 hover:bg-red-800">
                         View the Board
                     </Link>
-                    <Link href="/calendar" className="border-2 border-red-700 px-6 py-4 hover:bg-red-700">
+                    <Link href="/calendar" className="border-2 border-red-800 px-6 py-4 hover:bg-red-800">
                         Calendar
                     </Link>
                 </div>
