@@ -26,13 +26,6 @@ export async function loadEvents(): Promise<Record<string, CalendarEvent[]>> {
             description: 'Fundraiser for local orphans.',
             links: [],
         },
-        {
-            date: '2025-02-08',
-            times: { start: '6:03PM' },
-            title: 'FAKE EVENT',
-            description: 'Fundraiser for local orphans.',
-            links: [],
-        },
     ];
 
     for (let yr = new Date().getFullYear() - 1; yr < new Date().getFullYear() + 1; yr++) {

@@ -28,7 +28,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     }, []);
 
     return (
-        <div className="antialiased flex flex-col min-h-screen border-2 border-gray-200">
+        <div className="antialiased flex flex-col min-h-screen">
             <Header />
             <MainContent>
                 <Component {...pageProps} />
