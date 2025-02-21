@@ -26,6 +26,7 @@ const eslintConfig = [
             'simple-import-sort/exports': 'error',
         },
     },
+    { ignores: ['node_modules', 'lib/clover.sdk.js'] },
 ];
 
 export default eslintConfig;

@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import React, { MouseEvent, useCallback } from 'react';
+import React, { useCallback } from 'react';
 
 import { Button } from '@/components/button';
 import { Heading, Paragraph, Subheading } from '@/components/heading';
@@ -10,10 +10,10 @@ import { PageSection } from '@/components/page-section';
 import { PageWrapper } from '@/components/page-wrapper';
 
 // import Iframe from 'react-iframe';
-import PaymentForm from './components/form';
+// import PaymentForm from './components/form';
 
 const SpringDoins6030 = () => {
-    const handleCTA = useCallback((_: MouseEvent<HTMLDivElement>) => {
+    const handleCTA = useCallback(() => {
         // ref.current?.scrollIntoView({ behavior: 'smooth' });
     }, []);
 
@@ -55,7 +55,7 @@ const SpringDoins6030 = () => {
 
             <PageSection>
                 <Subheading>Tickets</Subheading>
-                <PaymentForm />
+                {/*<PaymentForm />*/}
             </PageSection>
         </PageWrapper>
     );
