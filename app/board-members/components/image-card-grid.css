@@ -1,0 +1,3 @@
+.image-card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(333px, 100%), 1fr));
+}
