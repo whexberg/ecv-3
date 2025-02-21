@@ -21,8 +21,6 @@ export const Header = () => {
     const openMenu = () => setIsOpen(true);
     const closeMenu = () => setIsOpen(false);
 
-    console.log(isOpen);
-
     useEffect(() => {
         if (isOpen) document.body.classList.add('overflow-hidden');
         else document.body.classList.remove('overflow-hidden');
