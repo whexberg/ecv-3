@@ -2,21 +2,13 @@
 
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import React, { useCallback } from 'react';
 
 import { Button } from '@/components/button';
-import { Heading, Paragraph, Subheading } from '@/components/heading';
+import { Heading, Subheading, Text } from '@/components/heading';
 import { PageSection } from '@/components/page-section';
 import { PageWrapper } from '@/components/page-wrapper';
 
-// import Iframe from 'react-iframe';
-// import PaymentForm from './components/form';
-
 const SpringDoins6030 = () => {
-    const handleCTA = useCallback(() => {
-        // ref.current?.scrollIntoView({ behavior: 'smooth' });
-    }, []);
-
     return (
         <PageWrapper>
             <PageSection>
@@ -28,7 +20,9 @@ const SpringDoins6030 = () => {
                     <Subheading>Spring Doins 6030</Subheading>
 
                     <div className="flex justify-center">
-                        <Button onClick={handleCTA}>Pay your rub!</Button>
+                        <Button link href="https://link.clover.com/urlshortener/qPPSBm">
+                            Pre Pay Now!
+                        </Button>
                     </div>
 
                     <Image
@@ -47,15 +41,21 @@ const SpringDoins6030 = () => {
                     <Subheading>Time & Location</Subheading>
 
                     <div>
-                        <Paragraph>April 25-27, 2025 C.Y. 6030</Paragraph>
-                        <Paragraph>Foresthill, CA</Paragraph>
+                        <Text>📅 Date: April 25-27, 2025 C.Y. 6030</Text>
+                        <Text>📍 Location: Foresthill, CA </Text>
+                        <Text>💰 Cost:</Text>
+                        <ul className="list-disc list-inside pl-8">
+                            <Text as="li">Redshirt: $60 ($55 Prepay)</Text>
+                            <Text as="li">PBC: $103</Text>
+                            <Text as="li">NO RETREADS</Text>
+                        </ul>
                     </div>
                 </div>
-            </PageSection>
-
-            <PageSection>
-                <Subheading>Tickets</Subheading>
-                {/*<PaymentForm />*/}
+                <div className="flex justify-center">
+                    <Button link href="https://link.clover.com/urlshortener/qPPSBm">
+                        Pre Pay Now!
+                    </Button>
+                </div>
             </PageSection>
         </PageWrapper>
     );

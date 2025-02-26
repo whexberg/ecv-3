@@ -1,5 +1,5 @@
 import { Noto_Sans, Sedan_SC } from 'next/font/google';
-import React, { FC } from 'react';
+import React, { FC, JSX } from 'react';
 
 const sedan = Sedan_SC({ weight: ['400'], subsets: ['latin'] });
 const notoSans = Noto_Sans({ weight: ['400', '500', '600', '700', '800'], subsets: ['latin'] });
@@ -7,6 +7,8 @@ const notoSans = Noto_Sans({ weight: ['400', '500', '600', '700', '800'], subset
 // Define shared props for all components
 type TypographyProps = {
     children: React.ReactNode;
+
+    as?: keyof JSX.IntrinsicElements;
 
     small?: boolean;
     medium?: boolean;
@@ -29,69 +31,68 @@ type TypographyProps = {
     style?: React.CSSProperties; // Inline styles
 };
 
-export const Heading: FC<TypographyProps> = (props: TypographyProps) => {
-    const weightClass = resolveWeightClass(props, 'font-bold');
-    const sizeClass = resolveSizeClass(props, 'text-5xl');
-    const colorClass = resolveColorClass(props, 'text-white');
-    const alignmentClass = resolveAlignmentClass(props, 'text-center');
+// Reusable typography component factory
+function createTypographyComponent(
+    defaultTag: keyof JSX.IntrinsicElements,
+    defaultSizeClass: string,
+    defaultWeightClass: string,
+    defaultColorClass: string,
+    defaultAlignmentClass: string,
+    fontStyle?: React.CSSProperties,
+): FC<TypographyProps> {
+    const TypographyComponent: FC<TypographyProps> = (props) => {
+        const sizeClass = resolveSizeClass(props, defaultSizeClass);
+        const weightClass = resolveWeightClass(props, defaultWeightClass);
+        const colorClass = resolveColorClass(props, defaultColorClass);
+        const alignmentClass = resolveAlignmentClass(props, defaultAlignmentClass);
 
-    const className = `${sizeClass} ${weightClass} ${colorClass} ${alignmentClass}`.replaceAll(/\s+/g, ' ').trim();
-    const styles = { ...sedan.style, ...props.style };
+        const className = `${sizeClass} ${weightClass} ${colorClass} ${alignmentClass}`.replaceAll(/\s+/g, ' ').trim();
+        const styles = { ...fontStyle, ...props.style };
+        const Element = props.as ?? defaultTag;
 
-    return (
-        <h2 className={className} style={styles}>
-            {props.children}
-        </h2>
-    );
-};
+        return (
+            <Element className={className} style={styles}>
+                {props.children}
+            </Element>
+        );
+    };
 
-export const Subheading: FC<TypographyProps> = (props: TypographyProps) => {
-    const weightClass = resolveWeightClass(props, 'font-semibold');
-    const sizeClass = resolveSizeClass(props, 'text-3xl');
-    const colorClass = resolveColorClass(props, 'text-white');
-    const alignmentClass = resolveAlignmentClass(props, 'text-center');
+    return TypographyComponent;
+}
 
-    const className = `${sizeClass} ${weightClass} ${colorClass} ${alignmentClass}`.replaceAll(/\s+/g, ' ').trim();
-    const styles = { ...sedan.style, ...props.style };
+export const Heading = createTypographyComponent(
+    'h2',
+    'text-5xl',
+    'font-bold',
+    'text-white',
+    'text-center',
+    sedan.style,
+);
 
-    return (
-        <h3 style={styles} className={className}>
-            {props.children}
-        </h3>
-    );
-};
+export const Subheading: FC<TypographyProps> = createTypographyComponent(
+    'h3',
+    'text-3xl',
+    'font-semibold',
+    'text-white',
+    'text-center',
+    notoSans.style,
+);
 
-export const Paragraph: FC<TypographyProps> = (props: TypographyProps) => {
-    const weightClass = resolveWeightClass(props);
-    const sizeClass = resolveSizeClass(props);
-    const colorClass = resolveColorClass(props);
-    const alignmentClass = resolveAlignmentClass(props);
+export const Text: FC<TypographyProps> = createTypographyComponent(
+    'p',
+    'text-base',
+    'font-normal',
+    'text-white',
+    'text-left',
+);
 
-    const className = `${sizeClass} ${weightClass} ${colorClass} ${alignmentClass}`.replaceAll(/\s+/g, ' ').trim();
-    const styles = { ...notoSans.style, ...props.style };
-
-    return (
-        <p style={styles} className={className}>
-            {props.children}
-        </p>
-    );
-};
-
-export const SmallText: FC<TypographyProps> = (props: TypographyProps) => {
-    const weightClass = resolveWeightClass(props);
-    const sizeClass = resolveSizeClass(props, 'text-sm');
-    const colorClass = resolveColorClass(props);
-    const alignmentClass = resolveAlignmentClass(props);
-
-    const className = `${sizeClass} ${weightClass} ${colorClass} ${alignmentClass}`.replaceAll(/\s+/g, ' ').trim();
-    const styles = { ...notoSans.style, ...props.style };
-
-    return (
-        <span style={styles} className={className}>
-            {props.children}
-        </span>
-    );
-};
+export const SmallText: FC<TypographyProps> = createTypographyComponent(
+    'span',
+    'text-sm',
+    'font-normal',
+    'text-white',
+    'text-left',
+);
 
 // Resolve size class based on props (small, medium, large)
 const resolveSizeClass = (

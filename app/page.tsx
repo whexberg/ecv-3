@@ -1,7 +1,8 @@
 import Image from 'next/image';
 import React from 'react';
 
-import { Heading, Paragraph, Subheading } from '@/components/heading';
+import { Button } from '@/components/button';
+import { Heading, Subheading, Text } from '@/components/heading';
 import PageSection from '@/components/page-section';
 
 const sponsors = [
@@ -69,20 +70,28 @@ export default function Home() {
                             <Subheading>Spring Doins 6030</Subheading>
 
                             <div>
-                                <Paragraph>📅 Date: April 25-27, 2025 C.Y. 6030</Paragraph>
-                                <Paragraph>📍 Location: Foresthill, CA </Paragraph>
-                                <Paragraph>💰 Cost: TBD</Paragraph>
+                                <Text>📅 Date: April 25-27, 2025 C.Y. 6030</Text>
+                                <Text>📍 Location: Foresthill, CA </Text>
+                                <Text>💰 Cost:</Text>
+                                <ul className="list-disc list-inside pl-8">
+                                    <Text as="li">Redshirt: $60 ($55 Prepay)</Text>
+                                    <Text as="li">PBC: $103</Text>
+                                    <Text as="li">NO RETREADS</Text>
+                                </ul>
                             </div>
                             <div>
-                                <Paragraph center>
+                                <Text center>
                                     LSD #3 Humbug &quot;Budman Also&quot; welcomes all brothers in good standing to 6030
                                     Spring Doins!
-                                </Paragraph>
-                                <Paragraph center>
-                                    3 Days of good food, full cup, and brotherhood at it&apos;s finest
-                                </Paragraph>
+                                </Text>
+                                <Text center>3 Days of good food, full cup, and brotherhood at it&apos;s finest</Text>
                             </div>
-                            <Paragraph center>More information coming soon!</Paragraph>
+                            {/*<Paragraph center>More information coming soon!</Paragraph>*/}
+                            <div className="flex justify-center mt-8">
+                                <Button link href="/events/6030-spring-doins">
+                                    More Info
+                                </Button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -176,7 +185,7 @@ export default function Home() {
 
             <PageSection heading="Mission Statement" id="mission">
                 <div className="max-w-5xl mx-auto">
-                    <Paragraph center>
+                    <Text center>
                         From the rugged peaks to the dust-choked valleys of the American West, Lord Sholto Douglas,
                         Chapter #3 of E Clampus Vitus, stands as a steadfast guardian of history&apos;s untamed spirit.
                         We are the keepers of legends, the heralds of forgotten pioneers, and the champions of
@@ -185,7 +194,7 @@ export default function Home() {
                         who dared to dream, toil, and endure. We are more than a chapter—we are a beacon of fellowship
                         and brotherhood, fueled by wit, wisdom, and an undying love of the magnificent legacy of the
                         West.
-                    </Paragraph>
+                    </Text>
                 </div>
             </PageSection>
 
