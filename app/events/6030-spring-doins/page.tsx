@@ -29,7 +29,7 @@ const SpringDoins6030 = () => {
                     </div>
 
                     <div className="flex gap-4 mx-auto">
-                        <Link href="/images/flyers/spring-6030-1.jpg">
+                        <Link href="/images/flyers/spring-6030-1.jpg" target="_blank">
                             <Image
                                 priority
                                 src="/images/flyers/spring-6030-1.jpg"
@@ -39,7 +39,7 @@ const SpringDoins6030 = () => {
                                 className="w-full mx-auto"
                             />
                         </Link>
-                        <Link href="/images/flyers/spring-6030-2.jpg">
+                        <Link href="/images/flyers/spring-6030-2.jpg" target="_blank">
                             <Image
                                 priority
                                 src="/images/flyers/spring-6030-2.jpg"

@@ -75,7 +75,7 @@ export default function Home() {
                     </div>
                     <div className="flex flex-col justify-center gap-2">
                         <div className="flex gap-4 max-w-3xl mx-auto">
-                            <Link href="/images/flyers/spring-6030-1.jpg">
+                            <Link href="/images/flyers/spring-6030-1.jpg" target="_blank">
                                 <Image
                                     priority
                                     src="/images/flyers/spring-6030-1.jpg"
@@ -85,7 +85,7 @@ export default function Home() {
                                     className="w-full mx-auto"
                                 />
                             </Link>
-                            <Link href="/images/flyers/spring-6030-2.jpg">
+                            <Link href="/images/flyers/spring-6030-2.jpg" target="_blank">
                                 <Image
                                     priority
                                     src="/images/flyers/spring-6030-2.jpg"
