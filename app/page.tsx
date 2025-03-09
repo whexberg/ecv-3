@@ -1,8 +1,9 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 
 import { Button } from '@/components/button';
-import { Heading, Subheading, Text } from '@/components/heading';
+import { Heading, SmallText, Subheading, Text } from '@/components/heading';
 import PageSection from '@/components/page-section';
 
 const sponsors = [
@@ -53,46 +54,49 @@ export default function Home() {
             </PageSection>
 
             <PageSection heading="Upcoming Events" id="events">
-                <div className="flex flex-col lg:flex-row gap-8 items-center justify-center">
-                    <div className="basis-1/2">
-                        <Image
-                            priority
-                            src="/images/flyers/spring-doins-6030.jpg"
-                            alt="Spring Doin Flyer"
-                            width={0}
-                            height={0}
-                            className="w-full mx-auto"
-                        />
-                    </div>
-                    <div className="basis-1/2">
-                        <div className="flex flex-col basis-1/2 justify-center gap-4 mt-8 max-w-3xl mx-auto">
-                            <Heading>Lord Sholto Douglas Chapter 3 ECV Returns to Foresthill</Heading>
-                            <Subheading>Spring Doins 6030</Subheading>
+                <div className="flex flex-col gap-8 items-center justify-center">
+                    <div className="flex flex-col basis-1/2 justify-center gap-4 mt-8 max-w-3xl mx-auto">
+                        <Heading>Lord Sholto Douglas Chapter 3 ECV Returns to Foresthill</Heading>
+                        <Subheading>Spring Doins 6030</Subheading>
 
-                            <div>
-                                <Text>📅 Date: April 25-27, 2025 C.Y. 6030</Text>
-                                <Text>📍 Location: Foresthill, CA </Text>
-                                <Text>💰 Cost:</Text>
-                                <ul className="list-disc list-inside pl-8">
-                                    <Text as="li">Redshirt: $60 ($55 Prepay)</Text>
-                                    <Text as="li">PBC: $103</Text>
-                                    <Text as="li">NO RETREADS</Text>
-                                </ul>
-                            </div>
-                            <div>
-                                <Text center>
-                                    LSD #3 Humbug &quot;Budman Also&quot; welcomes all brothers in good standing to 6030
-                                    Spring Doins!
-                                </Text>
-                                <Text center>3 Days of good food, full cup, and brotherhood at it&apos;s finest</Text>
-                            </div>
-                            {/*<Paragraph center>More information coming soon!</Paragraph>*/}
-                            <div className="flex justify-center mt-8">
-                                <Button link href="/events/6030-spring-doins">
-                                    More Info
-                                </Button>
-                            </div>
+                        <div>
+                            <Text center>
+                                LSD #3 Humbug &quot;Budman Also&quot; welcomes all brothers in good standing to 6030
+                                Spring Doins!
+                            </Text>
+                            <Text center>3 Days of good food, full cup, and brotherhood at it&apos;s finest</Text>
                         </div>
+                        {/*<Paragraph center>More information coming soon!</Paragraph>*/}
+                        <div className="flex justify-center mt-8">
+                            <Button link href="/events/6030-spring-doins">
+                                More Info
+                            </Button>
+                        </div>
+                    </div>
+                    <div className="flex flex-col justify-center gap-2">
+                        <div className="flex gap-4 max-w-3xl mx-auto">
+                            <Link href="/images/flyers/spring-6030-1.jpg">
+                                <Image
+                                    priority
+                                    src="/images/flyers/spring-6030-1.jpg"
+                                    alt="Spring Doin Flyer Page 1"
+                                    width={0}
+                                    height={0}
+                                    className="w-full mx-auto"
+                                />
+                            </Link>
+                            <Link href="/images/flyers/spring-6030-2.jpg">
+                                <Image
+                                    priority
+                                    src="/images/flyers/spring-6030-2.jpg"
+                                    alt="Spring Doin Flyer Page 1"
+                                    width={0}
+                                    height={0}
+                                    className="w-full mx-auto"
+                                />
+                            </Link>
+                        </div>
+                        <SmallText center>(Click images to view full size)</SmallText>
                     </div>
                 </div>
             </PageSection>
