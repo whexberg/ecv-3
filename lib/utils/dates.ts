@@ -1,9 +1,14 @@
-export const DateUtils = {
-    getFormattedDate: (dateString: string): string => {
-        if (dateString === 'unknown') return dateString;
+import { format, parse } from 'date-fns';
 
-        const date = new Date(dateString);
-        return `${new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format(date)} C.Y. ${DateUtils.getClamperYear(date)}`;
+export const DateUtils = {
+    getFormattedDate: (str: string): string => {
+        if (str === 'unknown') return str;
+
+        const date = parse(str, 'yyyy-MM-dd', new Date());
+        const fmt = format(date, 'MMMM dd, yyyy');
+        const cy = DateUtils.getClamperYear(date);
+
+        return `${fmt} C.Y. ${cy}`;
     },
     getClamperYear: (date: Date): number => date.getFullYear() + 4005,
 };

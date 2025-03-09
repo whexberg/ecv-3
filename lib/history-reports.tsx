@@ -4,6 +4,7 @@ import * as dateFns from 'date-fns';
 import { Cinzel } from 'next/font/google';
 
 import CustomImage from '@/components/custom-image';
+import { Text } from '@/components/heading';
 import Video from '@/components/video';
 import { FileUtils } from '@/lib/utils/files';
 
@@ -17,9 +18,7 @@ type HistoryReportMeta = Meta<{
 }>;
 
 export async function getHistoryReportByName(filename: string): Promise<ParsedMDX<HistoryReportMeta> | undefined> {
-    const filePath = path.join(process.cwd(), 'content/history-reports', filename);
-
-    return FileUtils.parseMDXFile<HistoryReportMeta>(filePath, {
+    return FileUtils.parseMDXFile<HistoryReportMeta>(path.join(process.cwd(), 'content/history-reports', filename), {
         components: {
             CustomImage,
             Video,
@@ -70,6 +69,13 @@ export async function getHistoryReportByName(filename: string): Promise<ParsedMD
                         FYIK
                     </p>
                     <p {...props}>{'"CREDO QUIA ABSURDUM"'}</p>
+                </div>
+            ),
+            WSTB: () => (
+                <div className="mt-20">
+                    <Text large center>
+                        WHAT SAY THE BRETHREN!
+                    </Text>
                 </div>
             ),
         },
