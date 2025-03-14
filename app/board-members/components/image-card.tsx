@@ -21,7 +21,7 @@ export const ImageCard = ({ description, image, style, title }: ImageCardProps) 
                 <Heading bold xlarge>
                     {'"' + title + '"'}
                 </Heading>
-                <SmallText>{description}</SmallText>
+                <SmallText center>{description}</SmallText>
             </div>
         </div>
     );

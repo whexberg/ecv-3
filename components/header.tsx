@@ -12,7 +12,7 @@ const links = [
     { href: '/', text: 'Home' },
     { href: '/board-members', text: 'The Board' },
     { href: '/calendar', text: 'Calendar' },
-    { href: '/hall-of-humbugery', text: 'Hall of Humbugery' },
+    { href: '/hall-of-humbuggery', text: 'Hall of Humbuggery' },
     { href: '/history-reports', text: 'History Reports' },
 ] as const;
 

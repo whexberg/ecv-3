@@ -4,7 +4,7 @@ import PageSection from '@/components/page-section';
 
 export default function AboutPage() {
     return (
-        <PageSection heading="Lord Sholto Douglas' Hall of Humbugery">
+        <PageSection heading="Lord Sholto Douglas' Hall of Humbuggery">
             <div className="mx-auto max-w-3xl p-4 sm:p-6 lg:p-8 mb-12">
                 <p className="text-center text-lg leading-7">
                     Here we honor the legendary men who have ascended to the highest echelons of our board, carrying the
@@ -19,7 +19,7 @@ export default function AboutPage() {
             </div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-                src="./images/humbugery/Grand+Banquet+Placemat+.jpg"
+                src="./images/humbuggery/Grand+Banquet+Placemat+.jpg"
                 alt="Grand Banquet Placemat"
                 className="w-full pb-12"
             />
@@ -80,7 +80,7 @@ export default function AboutPage() {
                 ].map((image) => (
                     <Image
                         key={image}
-                        src={`./images/humbugery/${image}`}
+                        src={`./images/humbuggery/${image}`}
                         className="w-full aspect-square object-cover"
                         width={0}
                         height={0}
