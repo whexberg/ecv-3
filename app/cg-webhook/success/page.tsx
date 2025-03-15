@@ -9,15 +9,17 @@ import { PageSection } from '@/components/page-section';
 import { PageWrapper } from '@/components/page-wrapper';
 
 const CloverGoSuccessPage = () => {
-    const navigate = useRouter();
+    const router = useRouter();
+    const navigateHome = () => router.push('/');
+
     useEffect(() => {
-        setTimeout(() => navigate.push('/'), 3000);
+        setTimeout(navigateHome, 3000);
     });
 
     return (
         <PageWrapper>
             <PageSection>
-                <div className="flex flex-col mx-auto gap-8">
+                <div className="mx-auto flex flex-col gap-8">
                     <div className="flex flex-col gap-4">
                         <Heading>Transaction Success</Heading>
                         <Subheading>You&apos;re all set</Subheading>
@@ -26,9 +28,7 @@ const CloverGoSuccessPage = () => {
                     <Text center>Redirecting you to the home page, now</Text>
 
                     <div className="flex justify-center">
-                        <Button link href="/">
-                            Home
-                        </Button>
+                        <Button onClick={navigateHome}>Home</Button>
                     </div>
                 </div>
             </PageSection>

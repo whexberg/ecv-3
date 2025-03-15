@@ -1,19 +1,21 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/button';
 import { Text } from '@/components/heading';
 import { PageSection } from '@/components/page-section';
 import { PageWrapper } from '@/components/page-wrapper';
 
-const SpringDoins6030 = () => {
+export default function SpringDoins6030() {
+    const router = useRouter();
+
     return (
         <PageWrapper>
-            <PageSection subheading="LSD #3 ECV Returns To ForestHill" heading="Spring Doins 6030">
-                <div className="flex flex-col max-w-3xl mx-auto gap-8">
+            <PageSection subheading="LSD #3 ECV Returns To ForestHill" heading="Spring Doins 6030" narrow>
+                <div className="flex flex-col items-center justify-center gap-4">
                     <Text>
                         Humbug Budman Also and his board of questionable characters have got a doins planned to bring
                         you back in time. A time where all brothers are treated with equal indignity. The Slippery, both
@@ -22,13 +24,11 @@ const SpringDoins6030 = () => {
                         Saturday, Breakfast, mid-day delights, and a Dinner to fill the gold pan of a prospector
                     </Text>
 
-                    <div className="flex justify-center">
-                        <Button link href="https://link.clover.com/urlshortener/qPPSBm">
-                            Pre Pay Now!
-                        </Button>
-                    </div>
+                    <Button onClick={() => router.push('https://link.clover.com/urlshortener/qPPSBm')}>
+                        Pre Pay Now!
+                    </Button>
 
-                    <div className="flex gap-4 mx-auto">
+                    <div className="mx-auto flex gap-4">
                         <Link href="/images/flyers/spring-6030-1.jpg" target="_blank">
                             <Image
                                 priority
@@ -36,7 +36,7 @@ const SpringDoins6030 = () => {
                                 alt="Spring Doin Flyer Page 1"
                                 width={0}
                                 height={0}
-                                className="w-full mx-auto"
+                                className="mx-auto w-full"
                             />
                         </Link>
                         <Link href="/images/flyers/spring-6030-2.jpg" target="_blank">
@@ -46,7 +46,7 @@ const SpringDoins6030 = () => {
                                 alt="Spring Doin Flyer Page 1"
                                 width={0}
                                 height={0}
-                                className="w-full mx-auto"
+                                className="mx-auto w-full"
                             />
                         </Link>
                     </div>
@@ -54,17 +54,17 @@ const SpringDoins6030 = () => {
             </PageSection>
 
             <PageSection heading="Time & Location">
-                <div className="flex flex-col max-w-3xl mx-auto gap-8">
+                <div className="mx-auto flex max-w-3xl flex-col gap-8">
                     <div>
                         <Text>📅 Date: April 25-27, 2025 C.Y. 6030</Text>
                         <Text>💰 Cost:</Text>
-                        <ul className="list-disc list-inside pl-8">
+                        <ul className="list-inside list-disc pl-8">
                             <Text as="li">Redshirt: $60 ($55 Prepay)</Text>
                             <Text as="li">PBC: $103</Text>
                             <Text as="li">NO RETREADS</Text>
                         </ul>
                         <Text>📍 Location: Foresthill, CA</Text>
-                        <ul className="list-disc list-inside pl-8">
+                        <ul className="list-inside list-disc pl-8">
                             <Text as="li">Take I-80 toward Auburn</Text>
                             <Text as="li">Exit 121 for Foresthill Rd</Text>
                             <Text as="li">Turn left on Blackhawk Rd (1.5 miles)</Text>
@@ -72,7 +72,7 @@ const SpringDoins6030 = () => {
                         </ul>
                     </div>
                     <div className="flex justify-center">
-                        <Button link href="https://link.clover.com/urlshortener/qPPSBm">
+                        <Button onClick={() => router.push('https://link.clover.com/urlshortener/qPPSBm')}>
                             Pre Pay Now!
                         </Button>
                     </div>
@@ -82,6 +82,4 @@ const SpringDoins6030 = () => {
             <PageSection></PageSection>
         </PageWrapper>
     );
-};
-
-export default dynamic(() => Promise.resolve(SpringDoins6030), { ssr: false });
+}

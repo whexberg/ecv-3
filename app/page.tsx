@@ -1,10 +1,14 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 import { Button } from '@/components/button';
 import { Heading, SmallText, Subheading, Text } from '@/components/heading';
 import PageSection from '@/components/page-section';
+import { PageWrapper } from '@/components/page-wrapper';
 
 const sponsors = [
     {
@@ -41,8 +45,10 @@ const sponsors = [
 ];
 
 export default function Home() {
+    const router = useRouter();
+
     return (
-        <>
+        <PageWrapper>
             <PageSection heading="Lord Sholto Douglas" subheading="E Clampus Vitus Chapter #3" id="title">
                 <Image
                     src="./images/chapter-logo.jpg"
@@ -54,8 +60,8 @@ export default function Home() {
             </PageSection>
 
             <PageSection heading="Upcoming Events" id="events">
-                <div className="flex flex-col gap-8 items-center justify-center">
-                    <div className="flex flex-col basis-1/2 justify-center gap-4 mt-8 max-w-3xl mx-auto">
+                <div className="flex flex-col items-center justify-center gap-8">
+                    <div className="mx-auto mt-8 flex max-w-3xl basis-1/2 flex-col justify-center gap-4">
                         <Heading>Lord Sholto Douglas Chapter 3 ECV Returns to Foresthill</Heading>
                         <Subheading>Spring Doins 6030</Subheading>
 
@@ -67,14 +73,12 @@ export default function Home() {
                             <Text center>3 Days of good food, full cup, and brotherhood at it&apos;s finest</Text>
                         </div>
                         {/*<Paragraph center>More information coming soon!</Paragraph>*/}
-                        <div className="flex justify-center mt-8">
-                            <Button link href="/events/6030-spring-doins">
-                                More Info
-                            </Button>
+                        <div className="mt-8 flex justify-center">
+                            <Button onClick={() => router.push('/events/6030-spring-doins')}>More Info</Button>
                         </div>
                     </div>
                     <div className="flex flex-col justify-center gap-2">
-                        <div className="flex gap-4 max-w-3xl mx-auto">
+                        <div className="mx-auto flex max-w-3xl gap-4">
                             <Link href="/images/flyers/spring-6030-1.jpg" target="_blank">
                                 <Image
                                     priority
@@ -82,7 +86,7 @@ export default function Home() {
                                     alt="Spring Doin Flyer Page 1"
                                     width={0}
                                     height={0}
-                                    className="w-full mx-auto"
+                                    className="mx-auto w-full"
                                 />
                             </Link>
                             <Link href="/images/flyers/spring-6030-2.jpg" target="_blank">
@@ -92,7 +96,7 @@ export default function Home() {
                                     alt="Spring Doin Flyer Page 1"
                                     width={0}
                                     height={0}
-                                    className="w-full mx-auto"
+                                    className="mx-auto w-full"
                                 />
                             </Link>
                         </div>
@@ -187,30 +191,38 @@ export default function Home() {
             {/*    </div>*/}
             {/*</PageSection>*/}
 
-            <PageSection heading="Mission Statement" id="mission">
-                <div className="max-w-5xl mx-auto">
-                    <Text center>
-                        From the rugged peaks to the dust-choked valleys of the American West, Lord Sholto Douglas,
-                        Chapter #3 of E Clampus Vitus, stands as a steadfast guardian of history&apos;s untamed spirit.
-                        We are the keepers of legends, the heralds of forgotten pioneers, and the champions of
-                        community, bound by an unyielding brotherhood forged in the fires of camaraderie and absurdity.
-                        With reverence for the past and an eye on the future, we preserve the myths and truths of those
-                        who dared to dream, toil, and endure. We are more than a chapter—we are a beacon of fellowship
-                        and brotherhood, fueled by wit, wisdom, and an undying love of the magnificent legacy of the
-                        West.
-                    </Text>
-                </div>
+            <PageSection heading="The Clamper's Creed" id="creed" narrow>
+                <Text center>
+                    As I pass through life, may I always be humble;
+                    <br />
+                    may I never take myself seriously;
+                    <br />
+                    may I always appreciate a little of the ridiculous;
+                    <br />
+                    may I always be a two-fisted Clamper when the bottle passes my way
+                    <br />
+                    and if I imbibe, and can&apos;t hold it like a man,
+                    <br />
+                    then may I always be able to pass it to the next brother;
+                    <br />
+                    may I never forget the stout-hearted men who settled a great western wilderness
+                    <br />
+                    and the heritage we have today.
+                    <br />
+                    May I never fail to appreciate a bit of western lore.
+                </Text>
+                <Text center>- Anonymous</Text>
             </PageSection>
 
-            <PageSection id="sponsors" heading="Our Sponsors" className="bg-softBlack text-white">
-                <div className="flex justify-center items-center flex-wrap    ">
+            <PageSection id="sponsors" heading="Sponsors" narrow>
+                <div className="flex flex-wrap items-center justify-center">
                     {sponsors.map((sponsor) => (
                         <a
                             key={sponsor.name}
                             href={sponsor.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex flex-col items-center relative group w-1/4 p-4"
+                            className="group relative flex w-1/4 flex-col items-center p-4"
                         >
                             <Image
                                 src={sponsor.logo}
@@ -219,13 +231,13 @@ export default function Home() {
                                 alt={`${sponsor.name} logo`}
                                 className="group-hover:opacity-5"
                             />
-                            <span className="hidden group-hover:flex bg-dk_background/5 justify-center items-center z-40 text-sm font-medium inset-0 absolute">
+                            <span className="bg-dk_background/5 absolute inset-0 z-40 hidden items-center justify-center text-sm font-medium group-hover:flex">
                                 {sponsor.name}
                             </span>
                         </a>
                     ))}
                 </div>
             </PageSection>
-        </>
+        </PageWrapper>
     );
 }

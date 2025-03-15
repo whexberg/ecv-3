@@ -63,12 +63,10 @@ export default function RootLayout({ children }: PropsWithChildren) {
                     property="twitter:description"
                     content="Discover the history, events, and membership opportunities with Lord Sholto Douglas, Chapter #3 of E Clampus Vitus."
                 />
-
-                <script async src="https://checkout.sandbox.dev.clover.com/sdk.js" />
             </head>
 
             <body className={`${geistSans.variable} ${geistMono.variable}`}>
-                <div className="antialiased flex flex-col min-h-screen">
+                <div className="flex min-h-screen flex-col antialiased">
                     <Header />
                     <MainContent>{children}</MainContent>
                     <Footer />

@@ -1,70 +1,20 @@
-import fs from 'node:fs';
-import path from 'node:path';
+import { addDays, addHours, eachDayOfInterval, format, isFriday, setHours, setMinutes, startOfMonth } from 'date-fns';
 
-import { addDays, eachDayOfInterval, format, isFriday, isTuesday, startOfMonth } from 'date-fns';
-import { compileMDX } from 'next-mdx-remote/rsc';
-import rehypeAutolinkHeadings from 'rehype-autolink-headings';
-import rehypeHighlight from 'rehype-highlight';
-import rehypeSlug from 'rehype-slug';
+import { CalendarEvents } from '@/content/calendar-events';
 
-const BASE_FILE_PATH = path.join(process.cwd(), 'content/calendar-events');
+const meetings = getMeetingEvents();
 
-type Filetree = { tree: { path: string }[] };
-
-/**
- * Fetches calendar events from a specified file and returns them for a given date.
- *
- * @param {string} filename - The name of the file containing the calendar events.
- * @return {Promise<CalendarEvent[]>} A promise that resolves to an array of calendar events.
- */
-export async function getCalendarEventsByDate(filename: string): Promise<CalendarEvent[]> {
-    const filePath = path.join(BASE_FILE_PATH, filename);
-
-    if (!fs.existsSync(filePath)) return [];
-    const source: string = fs.readFileSync(filePath, 'utf-8');
-
-    const { frontmatter } = await compileMDX<{ date: string; events: CalendarEvent[] }>({
-        source,
-        options: {
-            parseFrontmatter: true,
-            mdxOptions: {
-                rehypePlugins: [rehypeHighlight, rehypeSlug, [rehypeAutolinkHeadings, { behavior: 'wrap' }]],
-            },
-        },
-    });
-
-    return frontmatter.events;
+for (const [date, events] of Object.entries(meetings)) {
+    CalendarEvents[date] ??= [];
+    CalendarEvents[date].push(...events);
 }
 
-/**
- * Retrieves calendar events from specified markdown files in the base file path.
- * Processes all `.mdx` files in the directory to extract events associated with each date.
- * Adds any additional monthly meeting events to the result.
- *
- * @return {Promise<Record<string, CalendarEvent[]>>} A promise that resolves to a record where keys are file names
- * (without the `.mdx` extension), and values are arrays of calendar events corresponding to those files.
- */
+export async function getCalendarEventsByDate(dateString: DateString): Promise<CalendarEvent[]> {
+    return CalendarEvents[dateString] ?? [];
+}
+
 export async function getCalendarEvents(): Promise<Record<string, CalendarEvent[]>> {
-    const dir = fs.readdirSync(BASE_FILE_PATH);
-
-    const repoFileTree: Filetree = { tree: dir.map((file) => ({ path: file })) };
-    const filesArray = repoFileTree.tree.map((obj) => obj.path).filter((path) => path.endsWith('.mdx'));
-
-    const events: Record<string, CalendarEvent[]> = {};
-    for (const file of filesArray) {
-        const dateEvents = await getCalendarEventsByDate(file);
-        if (dateEvents) events[file.replace('.mdx', '')] = dateEvents;
-    }
-
-    const monthlyMeetings = getMeetingEvents();
-    for (const entry of Object.entries(monthlyMeetings)) {
-        const date = entry[0];
-        const monthEvents = entry[1];
-        events[date] ??= [];
-        events[date].push(...monthEvents);
-    }
-
-    return events;
+    return CalendarEvents;
 }
 
 function getMeetingEvents(): Record<string, CalendarEvent[]> {
@@ -74,17 +24,27 @@ function getMeetingEvents(): Record<string, CalendarEvent[]> {
         for (let month = 0; month < 12; month++) {
             const { general, board } = monthlyMeetingDates(year, month);
 
-            const boardDate = format(board.date, 'yyyy-MM-dd');
+            const boardDate = format(board.start, 'yyyy-MM-dd');
             (events[boardDate] ??= []).push({
-                times: { start: board.start, end: board.end },
-                title: 'Board Meeting',
+                attendees: [],
                 description: 'Monthly board meeting.',
+                id: '',
+                isAllDay: false,
                 links: [],
+                location: '',
+                recurrence: null,
+                times: board,
+                title: 'Board Meeting',
             });
 
-            const generalDate = format(general.date, 'yyyy-MM-dd');
+            const generalDate = format(general.start, 'yyyy-MM-dd');
             (events[generalDate] ??= []).push({
-                times: { start: general.start, end: general.end },
+                times: general,
+                id: '',
+                attendees: [],
+                isAllDay: false,
+                location: '',
+                recurrence: null,
                 title: 'General Meeting',
                 description: 'Monthly general meeting for chapter members.',
                 links: [],
@@ -103,15 +63,14 @@ function monthlyMeetingDates(year: number, month: number) {
         end: addDays(firstDayOfMonth, 30), // Sufficient to cover even the longest months
     });
 
-    if (year >= 2025 && month > 0) {
-        return {
-            board: { date: daysInMonth.filter((d) => isFriday(d))[0], start: '8:03PM', end: '9:03PM' },
-            general: { date: daysInMonth.filter((d) => isFriday(d))[2], start: '8:03PM', end: '9:03PM' },
-        };
-    }
+    const boardStart = setMinutes(setHours(daysInMonth.filter((d) => isFriday(d))[0], 20), 3);
+    const boardEnd = addHours(boardStart, 1);
+
+    const generalStart = setMinutes(setHours(daysInMonth.filter((d) => isFriday(d))[2], 20), 3);
+    const generalEnd = addHours(generalStart, 1);
 
     return {
-        board: { date: daysInMonth.filter((d) => isTuesday(d))[1], start: '7:03PM', end: '8:03PM' },
-        general: { date: daysInMonth.filter((d) => isFriday(d))[2], start: '8:03PM', end: '9:03PM' },
+        board: { start: boardStart, end: boardEnd },
+        general: { start: generalStart, end: generalEnd },
     };
 }

@@ -18,34 +18,33 @@ export default function Calendar({ events }: { events: Record<string, CalendarEv
     const daysInMonth = eachDayOfInterval({ start: startOfCurrentMonth, end: endOfCurrentMonth });
     const renderedBuffer = new Array(startOfCurrentMonth.getDay())
         .fill(null)
-        .map((_, i) => <div key={i} className="text-center p-2" />);
+        .map((_, i) => <div key={i} className="p-2 text-center" />);
     const selectedEvents: CalendarEvent[] = selectedDate ? events[format(selectedDate, 'yyyy-MM-dd')] : [];
 
     return (
         <>
-            <h1 className="text-center mb-12 font-bold text-3xl">Events</h1>
-            <div className="flex flex-col justify-between items-center gap-4 lg:flex-row lg:gap-8">
+            <div className="flex flex-col items-center justify-between gap-4 lg:flex-row lg:gap-8">
                 <div className="">
-                    <h2 className="text-xl font-bold min-w-56 text-center">{format(currentDate, 'MMMM yyyy')}</h2>
+                    <h2 className="min-w-56 text-center text-xl font-bold">{format(currentDate, 'MMMM yyyy')}</h2>
                 </div>
                 <div className="flex gap-4">
                     {isToday(currentDate) || (
                         <button
                             onClick={() => setCurrentDate(new Date())}
-                            className="border px-4 py-2 hover:bg-red-800 "
+                            className="border px-4 py-2 hover:bg-red-800"
                         >
                             Go to today
                         </button>
                     )}
-                    <button onClick={handlePreviousMonth} className="text-xl p-4">
+                    <button onClick={handlePreviousMonth} className="p-4 text-xl">
                         {'<'}
                     </button>
-                    <button onClick={handleNextMonth} className="text-xl p-4">
+                    <button onClick={handleNextMonth} className="p-4 text-xl">
                         {'>'}
                     </button>
                 </div>
             </div>
-            <div className="flex flex-col lg:flex-row items-start justify-between p-4 gap-4">
+            <div className="flex flex-col items-start justify-between gap-4 p-4 lg:flex-row">
                 <div className="w-full lg:w-3/4">
                     <div className="grid grid-cols-7 gap-2">
                         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((dow) => (
@@ -69,7 +68,7 @@ export default function Calendar({ events }: { events: Record<string, CalendarEv
                             return (
                                 <div
                                     key={day.toISOString()}
-                                    className={`h-32 overflow-hidden cursor-pointer p-2 ${isToday(day) ? 'bg-red-800 text-white' : 'hover:bg-red-800'}`}
+                                    className={`h-32 cursor-pointer overflow-hidden p-2 ${isToday(day) ? 'bg-red-800 text-white' : 'hover:bg-red-800'}`}
                                     onClick={() => setSelectedDate(day)}
                                 >
                                     {format(day, 'd')}
@@ -78,14 +77,14 @@ export default function Calendar({ events }: { events: Record<string, CalendarEv
                                             if (idx < 2) {
                                                 return (
                                                     <div
-                                                        key={e.title + e.date}
+                                                        key={e.title + e.times.start}
                                                         className={
                                                             isToday(day)
-                                                                ? 'text-xs bg-white text-red-800 px-1.5 py-0.5'
-                                                                : 'text-xs bg-red-800 text-white px-1.5 py-0.5'
+                                                                ? 'bg-white px-1.5 py-0.5 text-xs text-red-800'
+                                                                : 'bg-red-800 px-1.5 py-0.5 text-xs text-white'
                                                         }
                                                     >
-                                                        <div className="font-bold hidden lg:block">{e.title}</div>
+                                                        <div className="hidden font-bold lg:block">{e.title}</div>
                                                     </div>
                                                 );
                                             }
@@ -94,7 +93,7 @@ export default function Calendar({ events }: { events: Record<string, CalendarEv
                                                 return (
                                                     <div
                                                         key={e.title}
-                                                        className="text-xs font-bold bg-red-800 text-white px-0.5 lg:px-1.5 py-0.5"
+                                                        className="bg-red-800 px-0.5 py-0.5 text-xs font-bold text-white lg:px-1.5"
                                                     >
                                                         <p className="hidden lg:block">{arr.length - 2} more...</p>
                                                         <p className="block lg:hidden">+{arr.length - 2}</p>
@@ -111,17 +110,24 @@ export default function Calendar({ events }: { events: Record<string, CalendarEv
                     </div>
                 </div>
                 {(selectedDate && (
-                    <div className="w-full lg:w-1/4 p-4 flex flex-col gap-4 text-white max-h-[600px] overflow-y-auto">
-                        <div className="w-full flex flex-col justify-center items-center text-center">
+                    <div className="flex max-h-[600px] w-full flex-col gap-4 overflow-y-auto p-4 text-white lg:w-1/4">
+                        <div className="flex w-full flex-col items-center justify-center text-center">
                             <h1 className="text-2xl font-bold">{format(selectedDate, 'MMM d, yyyy')}</h1>
                             <p>Events</p>
                         </div>
                         {selectedEvents?.length ? (
                             selectedEvents.map((event, i) => {
+                                const times = event.isAllDay
+                                    ? 'All Day'
+                                    : typeof event.times.start === 'string'
+                                      ? event.times.start
+                                      : event.times.end
+                                        ? `${format(event.times.start, 'h:mm a')} - ${format(event.times.end, 'h:mm a')}`
+                                        : format(event.times.start, 'h:mm a');
                                 return (
-                                    <div key={`${event.date}-${i}`} className="border-2 border-white p-4">
+                                    <div key={`${event.times.start}-${i}`} className="border-2 border-white p-4">
                                         <h2 className="text-xl font-bold text-red-800">{event.title}</h2>
-                                        <div className="mb-2 text-red-800">{event.times?.start}</div>
+                                        <div className="mb-2 text-red-800">{times}</div>
                                         <div className="text-sm">{event.description}</div>
                                     </div>
                                 );
@@ -131,7 +137,7 @@ export default function Calendar({ events }: { events: Record<string, CalendarEv
                         )}
                     </div>
                 )) || (
-                    <div className="w-1/4 p-4 flex flex-col justify-center items-center">
+                    <div className="flex w-1/4 flex-col items-center justify-center p-4">
                         Select a date to see events
                     </div>
                 )}

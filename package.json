@@ -5,13 +5,15 @@
   "scripts": {
     "dev": "next dev -p 3333",
     "build": "next build",
-    "start": "next build && PORT=3333 npx serve@latest out",
+    "start": "PORT=3333 npx serve@latest out",
     "lint": "next lint",
+    "lint:fix": "next lint --fix",
     "deploy": "next build && gh-pages --nojekyll -d out --cname lordsholtodouglas.com",
     "test": "node -e \"console.log(require.resolve('open-source/loader'))\""
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.0.1",
+    "clsx": "^2.1.1",
     "date-fns": "4.1.0",
     "eslint-plugin-react-hooks": "^5.2.0-canary-ff628334-20250205",
     "next": "15.1.5",
@@ -45,6 +47,7 @@
     "inquirer": "^12.4.1",
     "postcss": "^8.5.1",
     "prettier": "^3.4.2",
+    "prettier-plugin-tailwindcss": "^0.6.11",
     "tailwindcss": "4.0.1",
     "typescript": "5.7.3"
   }

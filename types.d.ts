@@ -10,14 +10,15 @@ type BoardProfile = {
 type ParsedMDX<T extends Record<string, unknown>> = { content: ReactElement; meta: Meta<T> };
 
 type CalendarEvent = {
-    date?: string;
-    times?: { start?: string; end?: string };
-    title: string;
+    id: string;
+    attendees: string[];
     description: string;
-    links: {
-        url: string;
-        text: string;
-    }[];
+    isAllDay: boolean;
+    links: Array<{ url: string; text: string }>;
+    location: string;
+    recurrence: 'daily' | 'weekly' | 'monthly' | 'yearly' | null;
+    times: { end?: Date; start: Date | string };
+    title: string;
 };
 
 type DateString = `${number}-${number}-${number}`;

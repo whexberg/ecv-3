@@ -7,29 +7,27 @@ type PageSectionProps = PropsWithChildren<{
     heading?: string;
     subheading?: string;
     className?: string;
-    bgColor?: string;
+    narrow?: boolean;
 }>;
 
-export function PageSection({ id, heading, subheading, bgColor, children }: PageSectionProps) {
+export function PageSection({ id, heading, subheading, narrow, children }: PageSectionProps) {
     return (
-        <section className={`bg-primary bg-[${bgColor}]`} id={id}>
-            <div className="container py-8 mx-auto">
-                <div className="mt-10 mb-20">
-                    {heading && (
-                        <Heading xxlarge bold center>
-                            {heading}
-                        </Heading>
-                    )}
-                    {subheading && (
-                        <Subheading xlarge bold center>
-                            {subheading}
-                        </Subheading>
-                    )}
-                </div>
-
-                {children}
+        <div id={id} className={`${narrow ? 'max-w-7xl' : 'container'} mx-auto px-4 sm:px-6 lg:px-8`}>
+            <div className="mb-20">
+                {heading && (
+                    <Heading xxlarge bold center>
+                        {heading}
+                    </Heading>
+                )}
+                {subheading && (
+                    <Subheading xlarge bold center>
+                        {subheading}
+                    </Subheading>
+                )}
             </div>
-        </section>
+
+            {narrow ? <div className="mx-auto max-w-3xl">{children}</div> : children}
+        </div>
     );
 }
 

@@ -1,39 +1,36 @@
-import Link from 'next/link';
+import clsx from 'clsx';
 import { MouseEventHandler, PropsWithChildren } from 'react';
 
-export type ButtonProps = { className?: string; disabled?: boolean } & (
-    | {
-          href?: string;
-          link: true;
-          newTab?: boolean;
-      }
-    | {
-          link?: false;
-          onClick?: MouseEventHandler;
-      }
-);
+export type ButtonProps = PropsWithChildren<{
+    className?: string;
+    disabled?: boolean;
+    onClick?: MouseEventHandler;
+    rounded?: boolean;
+}>;
 
-export const Button = (props: PropsWithChildren<ButtonProps>) => {
-    const classNames = 'block border-2 bg-red-800 border-red-800 px-6 py-4 hover:bg-red-800 cursor-pointer';
-
-    if (props.link) {
-        if (props.disabled) {
-            return (
-                <button className={classNames} disabled={props.disabled}>
-                    {props.children}
-                </button>
-            );
-        }
-        return (
-            <Link href={props.href ?? ''} target={props.newTab ? '_blank' : '_self'} className={classNames}>
-                {props.children}
-            </Link>
-        );
-    }
-
+export function Button({ disabled, rounded, onClick, children }: ButtonProps) {
     return (
-        <button className={classNames} onClick={props.onClick} disabled={props.disabled}>
-            {props.children}
+        <button
+            disabled={disabled}
+            type="button"
+            className={clsx(
+                disabled ? 'cursor-not-allowed' : 'cursor-pointer',
+                rounded ? 'rounded-full' : 'rounded',
+                'bg-red-800',
+                'focus-visible:outline',
+                'focus-visible:outline-2',
+                'focus-visible:outline-offset-2',
+                'focus-visible:outline-red-700',
+                'font-semibold',
+                'hover:bg-red-700',
+                'px-3.5',
+                'py-2',
+                'shadow-sm',
+                'text-sm',
+            )}
+            onClick={onClick}
+        >
+            {children}
         </button>
     );
-};
+}
