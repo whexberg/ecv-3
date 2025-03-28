@@ -1,16 +1,23 @@
 'use client';
 
+import { DateTime } from 'luxon';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 import { Button } from '@/components/button';
+import CountdownTimer from '@/components/countdown';
 import { Text } from '@/components/heading';
 import { PageSection } from '@/components/page-section';
 import { PageWrapper } from '@/components/page-wrapper';
 
+const cutoff = DateTime.local(2025, 4, 24, 0, 0, 0, 0, { zone: 'America/Los_Angeles' });
+
 export default function SpringDoins6030() {
     const router = useRouter();
+
+    const [enabled, setEnabled] = useState(DateTime.local() < cutoff);
 
     return (
         <PageWrapper>
@@ -20,13 +27,18 @@ export default function SpringDoins6030() {
                         Humbug Budman Also and his board of questionable characters have got a doins planned to bring
                         you back in time. A time where all brothers are treated with equal indignity. The Slippery, both
                         big and small, will be staffed by the finest Vituscan Riders on two wheels. The Chapter cook
-                        crew will be servn&apos; up some of the most delectable meals including a Friday $5 chip night.
+                        crew will be serv&apos;n; up some of the most delectable meals including a Friday $5 chip night.
                         Saturday, Breakfast, mid-day delights, and a Dinner to fill the gold pan of a prospector
                     </Text>
 
-                    <Button onClick={() => router.push('https://link.clover.com/urlshortener/qPPSBm')}>
-                        Pre Pay Now!
-                    </Button>
+                    {enabled && (
+                        <Link
+                            href="#pre-pay"
+                            className="my-4 cursor-pointer rounded bg-red-800 px-3.5 py-2 text-sm font-semibold shadow-sm hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
+                        >
+                            Pre-Pay NOW!
+                        </Link>
+                    )}
 
                     <div className="mx-auto flex gap-4">
                         <Link href="/images/flyers/spring-6030-1.jpg" target="_blank">
@@ -71,15 +83,53 @@ export default function SpringDoins6030() {
                             <Text as="li">The entrance will be on your left (Follow the signs)</Text>
                         </ul>
                     </div>
-                    <div className="flex justify-center">
-                        <Button onClick={() => router.push('https://link.clover.com/urlshortener/qPPSBm')}>
-                            Pre Pay Now!
-                        </Button>
-                    </div>
                 </div>
             </PageSection>
 
-            <PageSection></PageSection>
+            <PageSection heading="Pre-Pay!" id="pre-pay">
+                {enabled ? (
+                    <div className="mx-auto flex max-w-3xl flex-col gap-8">
+                        <div className="flex flex-col items-center">
+                            <div className="mb-4">
+                                <Text as="h1" xlarge center>
+                                    PRE-PAY ENDS
+                                </Text>
+                                <Text as="h1" xlarge>
+                                    <CountdownTimer target={cutoff} onCountdownEnd={() => setEnabled(false)} />
+                                </Text>
+                            </div>
+                            <Text large>
+                                Pre-pay ends at midnight on April 24, 2025. That means once the clock strikes 12:00 AM
+                                on Thursday, April 24, pre-pay is closed. So, make sure to pay by the end of Wednesday
+                                night (April 23) to take advantage of pre-pay! If you come here Thursday, looking to
+                                pre-pay for the doin&apos;s, you will be sorely disappointed.
+                            </Text>
+                        </div>
+                        <div className="flex justify-center">
+                            <Button onClick={() => router.push('https://link.clover.com/urlshortener/qPPSBm')}>
+                                Pre Pay Now!
+                            </Button>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="mx-auto flex max-w-3xl flex-col gap-8">
+                        <div className="flex flex-col items-center">
+                            <div className="mb-4">
+                                <Text as="h1" xlarge center>
+                                    PRE-PAY ENDED
+                                </Text>
+                                <Text as="h1" xlarge center>
+                                    <CountdownTimer target={cutoff} />
+                                </Text>
+                            </div>
+                            <Text large>
+                                Pre-pay ended at midnight (12:00 AM), April 24, 2025. Don&apos;t worry! You can still
+                                pay at the gate! See you in Foresthill!
+                            </Text>
+                        </div>
+                    </div>
+                )}
+            </PageSection>
         </PageWrapper>
     );
 }
