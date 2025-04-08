@@ -22,6 +22,11 @@ const sponsors = [
         link: 'https://www.facebook.com/profile.php?id=100091792135097',
     },
     {
+        name: 'Brew Masters Deli',
+        logo: './images/sponsors/brew_masters_deli.jpg',
+        link: 'https://www.facebook.com/Brewmastersdeli/',
+    },
+    {
         name: 'Joker from The Cinders',
         logo: './images/sponsors/cinders.jpg',
         link: 'https://www.facebook.com/profile.php?id=100061688721666',
