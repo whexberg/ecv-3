@@ -30,5 +30,3 @@ export function PageSection({ id, heading, subheading, narrow, children }: PageS
         </div>
     );
 }
-
-export default PageSection;
