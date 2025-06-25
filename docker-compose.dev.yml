@@ -1,0 +1,28 @@
+services:
+  nextjs:
+    build:
+      context: .
+      target: deps  # Only build to deps stage for development
+#    command: ls -la
+    command: npm run dev
+    volumes:
+      - .:/app
+      - ./tsconfig.json:/app/tsconfig.json
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true  # For file watching in Docker
+    ports:
+      - "3000:3000"
+    working_dir: /app
+
+  postgres:
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}_dev
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+    driver: local

@@ -1,5 +1,6 @@
 import './globals.css';
 
+import { Settings } from 'luxon';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import React, { PropsWithChildren } from 'react';
@@ -27,9 +28,9 @@ export const metadata: Metadata = {
         title: 'Lord Sholto Douglas, Chapter #3 - E Clampus Vitus',
         description:
             'Discover the history, events, and membership opportunities with Lord Sholto Douglas, Chapter #3 of E Clampus Vitus.',
-        url: 'https://lordsholtodouglas3.com',
+        url: 'https://lordsholtodouglas.com',
         type: 'website',
-        images: ['https://lordsholtodouglas3.com/og-image.jpg'],
+        images: ['https://lordsholtodouglas.com/og-image.jpg'],
     },
 
     twitter: {
@@ -37,7 +38,7 @@ export const metadata: Metadata = {
         title: 'Lord Sholto Douglas, Chapter #3 - E Clampus Vitus',
         description:
             'Explore the official website of Lord Sholto Douglas, Chapter #3, and join us in celebrating historical preservation and fellowship.',
-        images: ['https://lordsholtodouglas3.com/twitter-image.jpg'],
+        images: ['https://lordsholtodouglas.com/twitter-image.jpg'],
     },
 };
 
@@ -45,7 +46,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
     return (
         <html lang="en">
             <head>
-                <title>Lord Sholto Douglas, Chapter #3 - E Clampus Vitus</title>
+                <title>Lord Sholto Douglas, Chapter 3 - E Clampus Vitus</title>
                 <meta
                     name="description"
                     content="Welcome to the official website of Lord Sholto Douglas, E Clampus Vitus, Chapter #3. Explore our history, upcoming events, membership details, and more. Join us in celebrating the spirit of camaraderie and historical preservation."

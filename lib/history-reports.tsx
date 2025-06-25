@@ -23,12 +23,12 @@ export async function getHistoryReportByName(filename: string): Promise<ParsedMD
             CustomImage,
             Video,
             h1: (props) => (
-                <h1 className={`text-3xl py-4 mt-8 ${cinzel.className}`} {...props}>
+                <h1 className={`mt-8 py-4 text-3xl ${cinzel.className}`} {...props}>
                     {props.children}
                 </h1>
             ),
             h2: (props) => (
-                <h2 className={`text-2xl py-2 mt-8 ${cinzel.className}`} {...props}>
+                <h2 className={`mt-8 py-2 text-2xl ${cinzel.className}`} {...props}>
                     {props.children}
                 </h2>
             ),
@@ -48,18 +48,18 @@ export async function getHistoryReportByName(filename: string): Promise<ParsedMD
                 </p>
             ),
             CQA: (props) => (
-                <p className={`text-red-700 my-4 ${cinzel.className}`} {...props}>
+                <p className={`my-4 text-red-700 ${cinzel.className}`} {...props}>
                     CREDO QUIA ABSURDUM
                 </p>
             ),
             FYIK: (props) => (
-                <p className={`text-red-700 font-bold my-4 ${cinzel.className}`} {...props}>
+                <p className={`my-4 font-bold text-red-700 ${cinzel.className}`} {...props}>
                     FYIK
                 </p>
             ),
             KurteousSignOff: (props) => (
                 <div
-                    className={`my-20 font-bold flex flex-col items-center justify-center gap-4 ${cinzel.className}`}
+                    className={`my-20 flex flex-col items-center justify-center gap-4 font-bold ${cinzel.className}`}
                     {...props}
                 >
                     <p className="text-3xl" {...props}>

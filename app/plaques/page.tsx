@@ -1,4 +1,4 @@
-import PageSection from '@/components/page-section';
+import { PageSection } from '@/components/page-section';
 
 export default function PlaquesPage() {
     return (

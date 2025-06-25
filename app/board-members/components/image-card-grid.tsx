@@ -8,7 +8,7 @@ type Props = {
 
 export const ImageCardGrid = ({ items }: Props) => {
     return (
-        <div className="grid image-card-grid">
+        <div className="image-card-grid grid">
             {items?.map((profile, idx) => (
                 <ImageCard
                     key={profile.position + idx}

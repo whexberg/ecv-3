@@ -30,7 +30,7 @@ export const Header = () => {
     return (
         <header className="bg-red-800 text-white">
             <div className="container mx-auto flex items-center justify-between px-4">
-                <Link href="/" className="p-4">
+                <Link href="/public" className="p-4">
                     <Heading left xlarge>
                         Lord Sholto Douglas
                     </Heading>

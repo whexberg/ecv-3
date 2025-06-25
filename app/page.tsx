@@ -51,7 +51,7 @@ export default function Home() {
         <PageWrapper>
             <PageSection heading="Lord Sholto Douglas" subheading="E Clampus Vitus Chapter #3" id="title">
                 <Image
-                    src="./images/chapter-logo.jpg"
+                    src="/images/chapter-logo.jpg"
                     width={300}
                     height={300}
                     alt="Lord Sholto Douglas Logo"

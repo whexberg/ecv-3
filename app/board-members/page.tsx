@@ -1,4 +1,4 @@
-import PageSection from '@/components/page-section';
+import { PageSection } from '@/components/page-section';
 import { PageWrapper } from '@/components/page-wrapper';
 import { getBoardProfiles } from '@/lib/board-profiles';
 

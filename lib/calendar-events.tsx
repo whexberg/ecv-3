@@ -1,6 +1,10 @@
-import { addDays, addHours, eachDayOfInterval, format, isFriday, setHours, setMinutes, startOfMonth } from 'date-fns';
+import { randomUUID } from 'node:crypto';
+
+import { DateTime } from 'luxon';
 
 import { CalendarEvents } from '@/content/calendar-events';
+import { CalendarEventRow } from '@/lib/models/calendar-event';
+import { DateTimeUtils } from '@/lib/models/datetimes';
 
 const meetings = getMeetingEvents();
 
@@ -9,45 +13,41 @@ for (const [date, events] of Object.entries(meetings)) {
     CalendarEvents[date].push(...events);
 }
 
-export async function getCalendarEventsByDate(dateString: DateString): Promise<CalendarEvent[]> {
-    return CalendarEvents[dateString] ?? [];
-}
+function getMeetingEvents(): Record<string, CalendarEventRow[]> {
+    const events: Record<string, CalendarEventRow[]> = {};
 
-export async function getCalendarEvents(): Promise<Record<string, CalendarEvent[]>> {
-    return CalendarEvents;
-}
-
-function getMeetingEvents(): Record<string, CalendarEvent[]> {
-    const events: Record<string, CalendarEvent[]> = {};
-
-    for (let year = new Date().getFullYear() - 1; year <= new Date().getFullYear() + 1; year++) {
-        for (let month = 0; month < 12; month++) {
+    for (let year = DateTime.utc().year - 1; year <= DateTime.utc().year + 1; year++) {
+        for (let month = 1; month <= 12; month++) {
             const { general, board } = monthlyMeetingDates(year, month);
 
-            const boardDate = format(board.start, 'yyyy-MM-dd');
+            const boardDate = board.start.toISODate()!;
             (events[boardDate] ??= []).push({
-                attendees: [],
-                description: 'Monthly board meeting.',
-                id: '',
-                isAllDay: false,
-                links: [],
-                location: '',
-                recurrence: null,
-                times: board,
+                id: randomUUID(),
                 title: 'Board Meeting',
+                description: 'Monthly board meeting.',
+                location: '',
+                start_date: board.start.toUTC().toISODate()!,
+                start_time: board.start.toUTC().toISOTime()!,
+                end_date: board.end.toUTC().toISODate()!,
+                end_time: board.end.toUTC().toISOTime()!,
+                meta: {},
+                created_at: DateTime.utc().toISO(),
+                updated_at: DateTime.utc().toISO(),
             });
 
-            const generalDate = format(general.start, 'yyyy-MM-dd');
+            const generalDate = general.start.toISODate()!;
             (events[generalDate] ??= []).push({
-                times: general,
-                id: '',
-                attendees: [],
-                isAllDay: false,
-                location: '',
-                recurrence: null,
+                id: randomUUID(),
                 title: 'General Meeting',
                 description: 'Monthly general meeting for chapter members.',
-                links: [],
+                location: '',
+                start_date: general.start.toUTC().toISODate()!,
+                start_time: general.start.toUTC().toISOTime()!,
+                end_date: general.end.toUTC().toISODate()!,
+                end_time: general.end.toUTC().toISOTime()!,
+                meta: {},
+                created_at: DateTime.utc().toISO(),
+                updated_at: DateTime.utc().toISO(),
             });
         }
     }
@@ -55,19 +55,22 @@ function getMeetingEvents(): Record<string, CalendarEvent[]> {
 }
 
 function monthlyMeetingDates(year: number, month: number) {
-    const firstDayOfMonth = startOfMonth(new Date(year, month, 1));
+    const dt = DateTime.fromObject({ year, month });
 
     // Generate all days of the month
-    const daysInMonth = eachDayOfInterval({
-        start: firstDayOfMonth,
-        end: addDays(firstDayOfMonth, 30), // Sufficient to cover even the longest months
-    });
+    const daysInMonth = DateTimeUtils.eachDayOfInterval(dt.startOf('month'), dt.endOf('month'));
 
-    const boardStart = setMinutes(setHours(daysInMonth.filter((d) => isFriday(d))[0], 20), 3);
-    const boardEnd = addHours(boardStart, 1);
+    const boardStart = daysInMonth
+        .filter((d) => d.weekday === 5)[0]
+        .set({ hour: 30, minute: 3 })
+        .toUTC();
+    const boardEnd = boardStart.plus({ hours: 1 });
 
-    const generalStart = setMinutes(setHours(daysInMonth.filter((d) => isFriday(d))[2], 20), 3);
-    const generalEnd = addHours(generalStart, 1);
+    const generalStart = daysInMonth
+        .filter((d) => d.weekday === 5)[2]
+        .set({ hour: 30, minute: 3 })
+        .toUTC();
+    const generalEnd = generalStart.plus({ hours: 1 });
 
     return {
         board: { start: boardStart, end: boardEnd },

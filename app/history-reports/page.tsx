@@ -1,5 +1,5 @@
 import ListItem from '@/components/list-item';
-import PageSection from '@/components/page-section';
+import { PageSection } from '@/components/page-section';
 import { PageWrapper } from '@/components/page-wrapper';
 import { getHistoryReportsMeta } from '@/lib/history-reports';
 

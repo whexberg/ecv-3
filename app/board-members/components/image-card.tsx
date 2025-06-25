@@ -15,9 +15,9 @@ interface ImageCardProps {
 
 export const ImageCard = ({ description, image, style, title }: ImageCardProps) => {
     return (
-        <div className="w-full h-full p-4 flex flex-col" style={style}>
-            <Image src={image.src} alt={image.alt} width={0} height={0} className="w-full object-cover aspect-square" />
-            <div className="bg-red-800 text-center flex flex-col justify-center p-4 flex-grow">
+        <div className="flex h-full w-full flex-col p-4" style={style}>
+            <Image src={image.src} alt={image.alt} width={0} height={0} className="aspect-square w-full object-cover" />
+            <div className="flex flex-grow flex-col justify-center bg-red-800 p-4 text-center">
                 <Heading bold xlarge>
                     {'"' + title + '"'}
                 </Heading>

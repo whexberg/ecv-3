@@ -8,8 +8,8 @@ type CustomImageProps = {
 
 export default function CustomImage({ src, alt, priority }: CustomImageProps) {
     return (
-        <div className="w-full h-full">
-            <Image className="rounded-lg mx-auto" src={src} alt={alt} width={650} height={650} priority={!!priority} />
+        <div className="h-full w-full">
+            <Image className="mx-auto rounded-lg" src={src} alt={alt} width={650} height={650} priority={!!priority} />
         </div>
     );
 }

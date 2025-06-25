@@ -14,12 +14,12 @@ export default function ListItem({ post }: Props) {
     const formattedDate = DateUtils.getFormattedDate(date);
 
     return (
-        <li className="mt-4 text-2xl ">
+        <li className="mt-4 text-2xl">
             <Link className="underline hover:text-black/70" href={`/history-reports/${slug}`}>
                 {title}
             </Link>
             <br />
-            <p className="text-sm mt-1">{formattedDate}</p>
+            <p className="mt-1 text-sm">{formattedDate}</p>
         </li>
     );
 }

@@ -46,7 +46,7 @@ export default async function HistoryReportPage({ params }: Props) {
     // ));
 
     return (
-        <article className="md:px-8 mx-auto max-w-5xl">
+        <article className="mx-auto max-w-5xl md:px-8">
             <HistoryReportHeader {...meta} />
 
             <section className="text-center">{content}</section>
@@ -71,16 +71,16 @@ export default async function HistoryReportPage({ params }: Props) {
 const HistoryReportHeader = (meta: Meta<{ author: string; date: string; title: string }>) => {
     return (
         <div
-            className="flex flex-col items-center gap-4 text-center leading-relaxed my-8"
+            className="my-8 flex flex-col items-center gap-4 text-center leading-relaxed"
             style={cinzelDecorative.style}
         >
-            <h1 className="text-5xl tracking-[0.5rem] my-8 text-red-700 font-bold">{meta.title}</h1>
-            <p className="text-xl tracking-[0.75rem] text-red-700 font-bold">HISTORIANS REPORT</p>
+            <h1 className="my-8 text-5xl font-bold tracking-[0.5rem] text-red-700">{meta.title}</h1>
+            <p className="text-xl font-bold tracking-[0.75rem] text-red-700">HISTORIANS REPORT</p>
             <p>AS PREPARED BY</p>
-            <h1 className="text-xl tracking-widest text-red-700 font-bold">{meta.author}</h1>
+            <h1 className="text-xl font-bold tracking-widest text-red-700">{meta.author}</h1>
             <p className="tracking-normal">FOR THE GENERAL MEETING OF</p>
             <p className="tracking-normal">THE ANCIENT AND HONORABLE ORDER OF</p>
-            <p className="text-3xl tracking-[1rem] font-bold text-red-700">E CLAMPUS VITUS</p>
+            <p className="text-3xl font-bold tracking-[1rem] text-red-700">E CLAMPUS VITUS</p>
             <h1 className="text-xl">LORD SHOLTO DOUGLAS CHAPTER No. 3</h1>
             <p className="text-center text-red-700">{DateUtils.getFormattedDate(meta.date)}</p>
         </div>

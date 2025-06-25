@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import PageSection from '@/components/page-section';
+import { PageSection } from '@/components/page-section';
 import { PageWrapper } from '@/components/page-wrapper';
 
 export default function AboutPage() {
