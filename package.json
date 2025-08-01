@@ -31,6 +31,7 @@
     "rehype-highlight": "7.0.2",
     "rehype-slug": "6.0.0",
     "remote-pay-cloud": "4.1.2",
+    "rrule": "^2.8.1",
     "uuid": "11.1.0"
   },
   "devDependencies": {

@@ -1,17 +1,22 @@
 include .env
 export
 
+# ============================================================================
+# CONFIGURATION VARIABLES
+# ============================================================================
+
 UID := $(shell id -u)
 GID := $(shell id -g)
 
-# Configuration
+# Application Configuration
 APP_NAME := lsd3-website
 IMAGE_TAG ?= latest
-BACKUP_DIR := ./backups
-DATA_DIR := ./data
-DATABASEPATH := $(DATA_DIR)/database.sqlite
 DOMAIN ?= $(shell echo $DOMAIN)
 EMAIL ?= $(shell echo $EMAIL)
+
+# Directory Configuration
+BACKUP_DIR := ./backups
+DATA_DIR := ./data
 
 # Server configuration (set these in .env or export them)
 SERVER_USER ?= $(shell echo $SERVER_USER)
@@ -25,33 +30,70 @@ YELLOW := \033[1;33m
 BLUE := \033[0;34m
 NC := \033[0m # No Color
 
+DOCKER_FILES_PROD := -f docker-compose.yml
+DOCKER_FILES_DEV := $(DOCKER_FILES_PROD) -f docker-compose.dev.yml
+
+# ============================================================================
+# PHONY TARGETS
+# ============================================================================
+
 .PHONY: help build run stop clean logs backup restore deploy deploy-remote setup-vps health
+.PHONY: dev restart clean-all backup-remote sync-backups restore list-backups
+.PHONY: sync-files remote-status setup-nginx setup-ssl setup-ssl-staging ssl-status ssl-renew nginx-reload nginx-test
+.PHONY: migration-create migration-up migration-down migration-status db-create db-drop db-reset db-migrate db-seed db-setup
+.PHONY: status shell logs-remote
+
+# ============================================================================
+# MAIN TARGETS
+# ============================================================================
 
 # Default target
 help: ## Show this help message
 	@echo "$(BLUE)Next.js Docker Deployment Makefile$(NC)"
 	@echo "Usage: make <target>"
 	@echo ""
-	@echo "Targets:"
-	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  $(GREEN)%-15s$(NC) %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+	@echo "$(YELLOW)Main Targets:$(NC)"
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  $(GREEN)%-20s$(NC) %s\n", $$1, $$2}' $(MAKEFILE_LIST) | grep -E "(dev|build|run|stop|restart|clean|help)"
+	@echo ""
+	@echo "$(YELLOW)Database Targets:$(NC)"
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  $(GREEN)%-20s$(NC) %s\n", $$1, $$2}' $(MAKEFILE_LIST) | grep -E "(db-|migration-|backup|restore)"
+	@echo ""
+	@echo "$(YELLOW)Deployment Targets:$(NC)"
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  $(GREEN)%-20s$(NC) %s\n", $$1, $$2}' $(MAKEFILE_LIST) | grep -E "(deploy|remote|ssl|nginx)"
+	@echo ""
+	@echo "$(YELLOW)Monitoring Targets:$(NC)"
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  $(GREEN)%-20s$(NC) %s\n", $$1, $$2}' $(MAKEFILE_LIST) | grep -E "(health|status|logs|shell)"
+
+
+# ============================================================================
+# DEVELOPMENT TARGETS
+# ============================================================================
+
+build:
+	@docker compose $(DOCKER_FILES_PROD) build
 
 dev: ## Run in development mode with hot reload
-	@echo "$(BLUE)Starting development server...$(NC)"
-	@docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build -d nextjs postgres
+	@docker compose $(DOCKER_FILES_DEV) build nextjs postgres
+	@docker compose $(DOCKER_FILES_DEV) up -d nextjs postgres
 
-run: ## Run the application locally
-	@echo "$(BLUE)Starting application...$(NC)"
-	docker compose up --build
-	@echo "$(GREEN)✅ Application started at http://localhost:3000$(NC)"
+shell: ## Open shell in running container
+	docker compose exec nextjs sh
 
 stop: ## Stop the running containers
-	@echo "$(YELLOW)Stopping containers...$(NC)"
-	docker compose down
-	@echo "$(GREEN)✅ Containers stopped$(NC)"
+	@docker compose stop
 
-restart: stop run ## Restart the application
+down: ## Stop the running containers
+	@docker compose down
 
-# Maintenance targets
+restart: build stop run ## Restart the application
+
+run: ## Run the application locally
+	@docker compose $(DOCKER_FILES_PROD) up -d
+
+# ============================================================================
+# MAINTENANCE TARGETS
+# ============================================================================
+# begin-section: maintenance
 clean: ## Clean up Docker resources
 	@echo "$(YELLOW)Cleaning up Docker resources...$(NC)"
 	docker compose down --rmi all --volumes --remove-orphans 2>/dev/null || true
@@ -70,9 +112,12 @@ clean-all: ## Clean everything including volumes and images
 		echo "$(YELLOW)Cleanup cancelled$(NC)"; \
 	fi
 
-# Database management
+# ============================================================================
+# DATABASE MANAGEMENT
+# ============================================================================
+
+# Backup operations
 backup: ## Backup SQLite database
-	@echo "$(BLUE)Creating database backup...$(NC)"
 	@mkdir -p $(BACKUP_DIR)
 	@if [ -d "$(DATA_DIR)" ]; then \
 		cp -r $(DATA_DIR) $(BACKUP_DIR)/data-$(shell date +%Y%m%d-%H%M%S); \
@@ -102,7 +147,6 @@ sync-backups: ## Sync backups from remote server to local
 		$(BACKUP_DIR)/
 	@echo "$(GREEN)✅ Backups synced successfully$(NC)"
 
-
 restore: ## Restore database from backup (usage: make restore BACKUP=backup-name)
 	@if [ -z "$(BACKUP)" ]; then \
 		echo "$(RED)❌ Please specify backup: make restore BACKUP=data-20240101-120000$(NC)"; \
@@ -121,13 +165,68 @@ list-backups: ## List available backups
 	@echo "$(BLUE)Available backups:$(NC)"
 	@ls -la $(BACKUP_DIR)/ 2>/dev/null || echo "$(YELLOW)No backups found$(NC)"
 
-# Production deployment
+# Database Operations
+db-create: ## Create database
+	@docker compose $(DOCKER_FILES_PROD) exec postgres bash -c 'PGPASSWORD="$(DATABASE_PASSWORD)" createdb -h postgres -p 5432 -U $(DATABASE_USER) $(DATABASE_NAME)'
+
+db-drop: ## Drop database
+	@docker compose $(DOCKER_FILES_PROD) exec postgres bash -c 'PGPASSWORD="$(DATABASE_PASSWORD)" dropdb -h postgres -p 5432 -U $(DATABASE_USER) $(DATABASE_NAME)'
+
+db-reset: db-drop db-create ## Reset database (drop and create)
+
+db-migrate: ## Run migrations
+	@docker compose $(DOCKER_FILES_DEV) exec postgres dropdb -h $(DATABASE_HOST) -p $(DATABASE_PORT) -U $(DATABASE_USER) $(DATABASE_NAME)
+	@psql -h $(DATABASE_HOST) -p $(DATABASE_PORT) -U $(DATABASE_USER) -d $(DATABASE_NAME) -f db/000001_calendar_events.up.sql
+
+# Seed database
+db-seed:
+	@PGPASSWORD=$(DATABASE_PASSWORD) psql -h $(DATABASE_HOST) -p $(DATABASE_PORT) -U $(DATABASE_USER) -d $(DATABASE_NAME) -f seed.sql
+
+# Setup database (create, migrate, and seed)
+db-setup: db-create db-migrate db-seed
+	@echo "Database setup complete"
+
+# Migration operations
+
+migration-create:
+	@if [ -z "$(NAME)" ]; then \
+		echo "Error: NAME is required. Usage: make migration-create NAME=create_users_table"; \
+		exit 1; \
+	fi
+	@mkdir -p postgres/migrations
+	@migrate create -ext sql -dir postgres/migrations -seq $(NAME)
+	@echo "Migration files created for '$(NAME)'"
+
+# Apply all pending migrations
+migration-up:
+	@#migrate -path postgres/migrations -database "postgresql://$(DATABASE_USER):$(DATABASE_PASSWORD)@localhost:$(DATABASE_PORT)/$(DATABASE_NAME)?sslmode=disable" up
+	@docker run --rm -v $(shell pwd)/postgres/migrations:/migrations --network lordsholtodouglascom_app-network migrate/migrate \
+		-path=/migrations \
+       	-database "postgresql://$(DATABASE_USER):$(DATABASE_PASSWORD)@postgres:5432/$(DATABASE_NAME)?sslmode=disable" up
+	@echo "Migrations applied successfully"
+
+
+# Rollback the last migration
+migration-down:
+	@#migrate -path postgres/migrations -database "postgresql://$(DATABASE_USER):$(DATABASE_PASSWORD)@localhost:$(DATABASE_PORT)/$(DATABASE_NAME)?sslmode=disable" down
+	@docker run --rm -v $(shell pwd)/postgres/migrations:/migrations --network lordsholtodouglascom_app-network migrate/migrate \
+		-path=/migrations \
+		-database "postgresql://$(DATABASE_USER):$(DATABASE_PASSWORD)@postgres:5432/$(DATABASE_NAME)?sslmode=disable" down -all
+	@echo "Last migration rolled back"
+
+# Check migration status
+migration-status:
+	@migrate -path postgres/migrations -database "postgresql://$(DATABASE_USER):$(DATABASE_PASSWORD)@localhost:$(DATABASE_PORT)/$(DATABASE_NAME)?sslmode=disable" version
+
+# ============================================================================
+# DEPLOYMENT TARGETS
+# ============================================================================
+
 deploy-remote: sync-files ## Deploy to remote server (builds on server)
 	@echo "$(BLUE)Building and deploying on remote server...$(NC)"
-	@ssh $(SERVER_USER)@$(SERVER_HOST) -p $(SERVER_PORT) 'cd ~/$(APP_NAME) && make restart'
+	@ssh $(SERVER_USER)@$(SERVER_HOST) -p $(SERVER_PORT) 'cd ~/$(APP_NAME) && sudo make restart'
 	@echo "$(GREEN)✅ Remote deployment completed!$(NC)"
 
-# VPS setup
 setup-vps: ## Setup VPS with Docker and dependencies
 	@if [ -z "$(SERVER_USER)" ] || [ -z "$(SERVER_HOST)" ]; then \
 		echo "$(RED)❌ Please set SERVER_USER and SERVER_HOST$(NC)"; \
@@ -144,7 +243,6 @@ sync-files: backup-remote ## Sync application files to remote server
 		echo "$(RED)❌ Please set SERVER_USER and SERVER_HOST$(NC)"; \
 		exit 1; \
 	fi
-	@echo "$(BLUE)Syncing files to remote server...$(NC)"
 	@ssh $(SERVER_USER)@$(SERVER_HOST) -p $(SERVER_PORT) 'mkdir -p ~/$(APP_NAME)'
 	@rsync -avz --delete \
 		--exclude '*.tar' \
@@ -163,7 +261,6 @@ sync-files: backup-remote ## Sync application files to remote server
 		--exclude 'node_modules' \
 		--exclude 'out' \
 		./ $(SERVER_USER)@$(SERVER_HOST):~/$(APP_NAME)/
-	@echo "$(GREEN)✅ Files synced successfully$(NC)"
 
 remote-status: ## Check status on remote server
 	@if [ -z "$(SERVER_USER)" ] || [ -z "$(SERVER_HOST)" ]; then \
@@ -172,7 +269,11 @@ remote-status: ## Check status on remote server
 	fi
 	ssh $(SERVER_USER)@$(SERVER_HOST) -p $(SERVER_PORT) 'cd ~/$(APP_NAME) && docker compose ps && echo "" && docker stats --no-stream'
 
-# SSL/Nginx management
+
+# ============================================================================
+# SSL/NGINX MANAGEMENT
+# ============================================================================
+
 setup-nginx:
 	@echo "${BLUE}Setting up NGINX/SSL directories...${NC}"
 	@[ -d "nginx/conf.d" ] || mkdir -p nginx/conf.d
@@ -218,61 +319,9 @@ nginx-test: ## Test nginx configuration
 
 # Database targets
 
-migration-create:
-	@if [ -z "$(NAME)" ]; then \
-		echo "Error: NAME is required. Usage: make migration-create NAME=create_users_table"; \
-		exit 1; \
-	fi
-	@mkdir -p db/migrations
-	@migrate create -ext sql -dir db/migrations -seq $(NAME)
-	@echo "Migration files created for '$(NAME)'"
-
-# Apply all pending migrations
-migration-up:
-	@migrate -path db/migrations -database "postgresql://$(DATABASE_USER):$(DATABASE_PASSWORD)@localhost:5432/$(DATABASE_NAME)?sslmode=disable" up
-	@echo "Migrations applied successfully"
-
-# Rollback the last migration
-migration-down:
-	@migrate -path db/migrations -database "postgresql://$(DATABASE_USER):$(DATABASE_PASSWORD)@localhost:5432/$(DATABASE_NAME)?sslmode=disable" down
-	@echo "Last migration rolled back"
-
-# Check migration status
-migration-status:
-	@migrate -path db/migrations -database "postgresql://$(DATABASE_USER):$(DATABASE_PASSWORD)@localhost:5432/$(DATABASE_NAME)?sslmode=disable" version
-
-# Create database
-db-create:
-	@echo "Creating database $(DATABASE_NAME)..."
-	@docker compose -f docker-compose.yml -f docker-compose.dev.yml exec postgres createdb -h $(DATABASE_HOST) -p $(DATABASE_PORT) -U $(DATABASE_USER) $(DATABASE_NAME)
-	@echo "Database $(DATABASE_NAME) created successfully"
-
-# Drop database
-db-drop:
-	@echo "Dropping database $(DATABASE_NAME)..."
-	@docker compose -f docker-compose.yml -f docker-compose.dev.yml exec postgres dropdb -h $(DATABASE_HOST) -p $(DATABASE_PORT) -U $(DATABASE_USER) $(DATABASE_NAME)
-	@echo "Database $(DATABASE_NAME) dropped successfully"
-
-# Reset database (drop and create)
-db-reset: db-drop db-create
-	@echo "Database $(DATABASE_NAME) reset successfully"
-
-# Run migrations
-db-migrate:
-	@echo "Running migrations..."
-	@docker compose -f docker-compose.yml -f docker-compose.dev.yml exec postgres dropdb -h $(DATABASE_HOST) -p $(DATABASE_PORT) -U $(DATABASE_USER) $(DATABASE_NAME)
-	psql -h $(DATABASE_HOST) -p $(DATABASE_PORT) -U $(DATABASE_USER) -d $(DATABASE_NAME) -f db/000001_calendar_events.up.sql
-
-# Seed database
-db-seed:
-	@echo "Seeding database..."
-	@PGPASSWORD=$(DATABASE_PASSWORD) psql -h $(DATABASE_HOST) -p $(DATABASE_PORT) -U $(DATABASE_USER) -d $(DATABASE_NAME) -f seed.sql
-
-# Setup database (create, migrate, and seed)
-db-setup: db-create db-migrate db-seed
-	@echo "Database setup complete"
-
-.PHONY: db-create db-drop db-reset db-migrate db-seed db-setup
+# ============================================================================
+# MONITORING & HEALTH CHECKS
+# ============================================================================
 
 # Health checks
 health: ## Check application health
@@ -290,11 +339,6 @@ status: ## Show container status
 	@echo "$(BLUE)Resource Usage:$(NC)"
 	@docker stats --no-stream --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.MemPerc}}"
 
-# Development helpers
-shell: ## Open shell in running container
-	docker compose exec nextjs sh
-
-# Monitoring
 logs: ## Show application logs
 	@docker compose logs -f
 
