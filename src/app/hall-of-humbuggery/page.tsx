@@ -19,7 +19,7 @@ export default function AboutPage() {
                         of change, and torchbearers of the indomitable spirit that defines us all.
                     </p>
                 </div>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
+
                 <img
                     src="./images/humbuggery/Grand+Banquet+Placemat+.jpg"
                     alt="Grand Banquet Placemat"

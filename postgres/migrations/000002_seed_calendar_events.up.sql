@@ -55,9 +55,27 @@ INSERT INTO calendar_events (id, title, description, location, start_time, end_t
 VALUES ('48324ee6-0398-46a8-91f1-b9bf4c9246f8', 'T.R.A.S.H.', '', 'Nobody knows', '2025-07-11T00:00:00.000-07:00',
         '2025-07-13T23:59:59.999-07:00');
 
--- Receiving Home Toy Drive (2025-12-06)
-INSERT INTO calendar_events (id, title, description, location, start_time, end_time, frequency, interval, bymonth,
-                             byday)
-VALUES ('e34ad4f3-686e-4be3-b8ed-048a3c90d2f3', 'Receiving Home Toy Drive',
-        'Lets make it a Merry Christmas for the kids!', 'Walmart', '2025-12-06T00:00:00.000-08:00',
-        '2025-12-06T23:59:59.999-08:00', 'YEARLY', 1, ARRAY [12], ARRAY ['1SA']);
+INSERT INTO calendar_events (id, title, start_time, end_time)
+VALUES ('bd09f1b2-8fbf-4b9e-bd35-09febf522ec0', 'Fall Doins', '2025-09-19T00:00:00.000-08:00', '2025-09-21T23:59:59.999-08:00');
+
+INSERT INTO calendar_events (id, title)
+VALUES ('3c5fc8f9-ff4a-4188-9df7-19b852edf7ee', 'Family Campout');
+
+INSERT INTO calendar_events (id, title, start_time, end_time)
+VALUES ('95f3516c-b139-40a8-bf8c-b1e258372a1a', 'Widder''s Ball', '2025-11-08T20:03:00.000-08:00', '2025-11-08T22:00:00.000-08:00');
+
+INSERT INTO calendar_events (id, title, description, location, start_time, frequency, interval, bymonth, byday)
+VALUES ('025fed3c-614f-48bb-a283-858bebab94bc', 'Receiving Home Toy Drive', 'Lets make it a Merry Christmas for the kids!', 'Walmart in Roseville',
+        '2025-12-06T07:03:00.000-08:00', 'YEARLY', 1, ARRAY [12], ARRAY ['1SA']);
+
+INSERT INTO calendar_events (id, title, start_time, end_time)
+VALUES ('9bca4f62-9a80-42e5-96ac-39021f8d08db', 'Christmas Party', '2025-12-19T20:03:00.000-08:00', '2025-12-19T21:03:00.000-08:00');
+
+INSERT INTO calendar_events (id, title, start_time, end_time)
+VALUES ('c54cd3f4-9d2e-494b-9539-1ed9b6823cf2', 'Election Night', '2026-01-16T20:03:00.000-08:00', '2026-01-16T21:03:00.000-08:00');
+
+INSERT INTO calendar_events (id, title, start_time, end_time)
+VALUES ('a4534035-9286-4d22-974b-e86d17bd4cc2', 'Bean Feed', '2026-02-21T07:03:00.000-08:00', '2026-02-21T15:03:00.000-08:00');
+
+INSERT INTO calendar_events (id, title, start_time, end_time)
+VALUES ('a6795046-f3bd-43ab-abe3-a380a1e42c94', 'Spring Doins', '2026-04-17T07:03:00.000-08:00', '2026-04-19T15:03:00.000-08:00');

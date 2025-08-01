@@ -24,6 +24,8 @@ const eslintConfig = [
             'prettier/prettier': 'error',
             'simple-import-sort/imports': 'error',
             'simple-import-sort/exports': 'error',
+
+            '@next/next/no-img-element': 'off',
         },
     },
     { ignores: ['node_modules', 'lib/clover.sdk.js', '.next'] },

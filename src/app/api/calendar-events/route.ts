@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 import { CalendarEventsRepo } from '@/src/lib/database/calendar-events-repo';
 
-export async function POST(_req: NextRequest): Promise<NextResponse> {
+export async function POST(): Promise<NextResponse> {
     try {
         const events = await CalendarEventsRepo.getAllEvents();
         // const body = (await req.json()) as { currentDate: string };

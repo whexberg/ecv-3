@@ -1,7 +1,7 @@
 import { Calendar } from '@/src/app/calendar/calendar';
+import { CalendarInfoProvider } from '@/src/app/calendar/calendar-info.context';
 import { PageSection } from '@/src/components/page-section';
 import { PageWrapper } from '@/src/components/page-wrapper';
-import { CalendarInfoProvider } from '@/src/contexts/calendar-info.context';
 
 export default async function EventsPage() {
     return (

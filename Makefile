@@ -200,7 +200,7 @@ migration-create:
 # Apply all pending migrations
 migration-up:
 	@#migrate -path postgres/migrations -database "postgresql://$(DATABASE_USER):$(DATABASE_PASSWORD)@localhost:$(DATABASE_PORT)/$(DATABASE_NAME)?sslmode=disable" up
-	@docker run --rm -v $(shell pwd)/postgres/migrations:/migrations --network lordsholtodouglascom_app-network migrate/migrate \
+	@docker run --rm -v $(shell pwd)/postgres/migrations:/migrations --network lsd3-website_app-network migrate/migrate \
 		-path=/migrations \
        	-database "postgresql://$(DATABASE_USER):$(DATABASE_PASSWORD)@postgres:5432/$(DATABASE_NAME)?sslmode=disable" up
 	@echo "Migrations applied successfully"
@@ -209,7 +209,7 @@ migration-up:
 # Rollback the last migration
 migration-down:
 	@#migrate -path postgres/migrations -database "postgresql://$(DATABASE_USER):$(DATABASE_PASSWORD)@localhost:$(DATABASE_PORT)/$(DATABASE_NAME)?sslmode=disable" down
-	@docker run --rm -v $(shell pwd)/postgres/migrations:/migrations --network lordsholtodouglascom_app-network migrate/migrate \
+	@docker run --rm -v $(shell pwd)/postgres/migrations:/migrations --network lsd3-website_app-network migrate/migrate \
 		-path=/migrations \
 		-database "postgresql://$(DATABASE_USER):$(DATABASE_PASSWORD)@postgres:5432/$(DATABASE_NAME)?sslmode=disable" down -all
 	@echo "Last migration rolled back"

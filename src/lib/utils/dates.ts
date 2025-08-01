@@ -2,17 +2,13 @@ import { DateTime, Duration } from 'luxon';
 
 export const DateUtils = {
     getFormattedDate: (str: string): string => {
-        if (str === 'unknown') return str;
+        if (!str || str === 'unknown') return 'unknown';
 
         const date = DateTime.fromFormat(str, 'yyyy-MM-dd');
-        const cy = DateUtils.getClamperYear(date);
+        const cy = date.year + 4005;
 
         return `${date.toFormat('MMMM dd, yyyy')} C.Y. ${cy}`;
     },
-
-    getClamperYear: (date: DateTime): number => date.year + 4005,
-
-    isDateString: (v: unknown): v is DateString => typeof v === 'string' && /\d{4}-\d{2}-\d{2}/.test(v),
 
     getTimeUntil: (target: DateTime) => {
         const now = DateTime.now();

@@ -1,20 +1,35 @@
+'use client';
+
 import './image-card-grid.css';
 
+import { useBoardMemberInfo } from '@/src/app/board-members/board-member-info.context';
 import { ImageCard } from '@/src/app/board-members/components/image-card';
 
-type Props = {
-    items: Array<{ position: string; name: string; image: string }>;
-};
+export const ImageCardGrid = () => {
+    const { boardMembers } = useBoardMemberInfo();
+    if (Object.keys(boardMembers).length === 0) return null;
+    const pos = [
+        'Humbug',
+        'Vice Humbug',
+        'Gold Dust Receiver',
+        'Recorder',
+        'Damned Fool Door Keep',
+        'Board Member',
+        'Hangman',
+        'Clampatriarch',
+        'Historian',
+        'Historian Emeritus',
+        'Cyber Recorder',
+    ];
 
-export const ImageCardGrid = ({ items }: Props) => {
     return (
         <div className="image-card-grid grid">
-            {items?.map((profile, idx) => (
+            {pos?.map((position, idx) => (
                 <ImageCard
-                    key={profile.position + idx}
-                    description={profile.position}
-                    image={{ src: profile.image, alt: profile.name }}
-                    title={profile.name}
+                    key={boardMembers[position].position + idx}
+                    description={boardMembers[position].position}
+                    image={{ src: boardMembers[position].image, alt: boardMembers[position].name }}
+                    title={boardMembers[position].name}
                 />
             ))}
         </div>

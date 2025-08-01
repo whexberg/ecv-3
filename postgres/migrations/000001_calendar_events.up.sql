@@ -41,7 +41,7 @@ BEGIN
     NEW.updated_at = NOW();
     RETURN NEW;
 END;
-$$ LANGUAGE 'plpgsql';
+$$ LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS calendar_events_updated_at ON calendar_events;
 CREATE TRIGGER calendar_events_updated_at

@@ -3,7 +3,7 @@
 import { DateTime } from 'luxon';
 import { useEffect, useState } from 'react';
 
-import { useCalendarInfo } from '@/src/contexts/calendar-info.context';
+import { useCalendarInfo } from '@/src/app/calendar/calendar-info.context';
 import { CalendarEvent } from '@/src/lib/models/calendar-event';
 import { DateTimeUtils } from '@/src/lib/models/datetimes';
 
