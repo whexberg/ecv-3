@@ -16,7 +16,7 @@ export const BoardMemberInfoProvider = ({ children }: PropsWithChildren) => {
     useEffect(() => {
         fetch('/api/board-members', { method: 'POST' })
             .then((r) => r.json())
-            .then((res: EncodedBoardMember[]) =>
+            .then((res: EncodedBoardMember[] = []) =>
                 res
                     .map(BoardMember.deserialize)
                     .reduce((p, c) => ({ ...p, [c.position]: c }), {} as Record<string, BoardMember>),

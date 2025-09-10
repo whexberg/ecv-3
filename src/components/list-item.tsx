@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { DateUtils } from '@/src/lib/utils/dates';
+import { DateTimeUtils } from '@/src/lib/models/datetimes';
 
 type Props = {
     post: {
@@ -12,7 +12,7 @@ type Props = {
 
 export default function ListItem({ post }: Props) {
     const { id, title, date } = post;
-    const formattedDate = DateUtils.getFormattedDate(date);
+    const formattedDate = DateTimeUtils.getFormattedDate(date);
 
     return (
         <li className="mt-4 text-2xl">

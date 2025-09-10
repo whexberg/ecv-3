@@ -34,7 +34,7 @@ export default function SpringDoins6030() {
                     {enabled && (
                         <Link
                             href="#pre-pay"
-                            className="my-4 cursor-pointer rounded bg-red-800 px-3.5 py-2 text-sm font-semibold shadow-sm hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
+                            className="bg-accent houtline-accent-hover focus-visible:outline-accent-hover my-4 cursor-pointer rounded px-3.5 py-2 text-sm font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
                         >
                             Pre-Pay NOW!
                         </Link>

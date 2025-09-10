@@ -1,0 +1,14 @@
+name: lsd3-website-test
+
+services:
+  db:
+    image: postgres:17
+    profiles: [ "test" ]
+    env_file:
+      - ${ENV_FILE:-../.env.test}
+    ports:
+      - "55432:5432"
+    tmpfs: /var/lib/postgresql/data
+
+volumes:
+  pg_data-test:

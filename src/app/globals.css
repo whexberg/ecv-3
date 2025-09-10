@@ -1,33 +1,91 @@
+@import "https://fonts.googleapis.com/css2?family=IM+Fell+DW+Pica&family=Special+Elite&display=swap";
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
 @import "tailwindcss";
+
+/*@custom-variant dark (&:where(.dark, .dark *));*/
+/*@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));*/
+
+@theme {
+    --color-page: #1b1a17;
+    --color-on-page: #dfd9c8;
+
+    --color-surface: #dfd9c8;
+    --color-on-surface: #3b3d37;
+
+    --color-border: #cbbfa3;
+
+    --color-accent: #912f2f;
+    --color-on-accent: #ffffff;
+
+    --color-accent-hover: #7b2d26;
+
+
+    --font-default: "Noto Sans", "Nunito", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --font-serif: "IM Fell DW Pica", Georgia, serif;
+    --font-display: "Special Elite", serif; /* Typewriter / stamped feel*/
+    --shadow-card: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+@keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+    animation: spin-slow 4s linear infinite;
+}
+
+.pause-animation {
+    animation-play-state: paused;
+}
+
+.stamp {
+    font-family: var(--font-display);
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transform: rotate(-2deg);
+    border: 2px solid var(--color-accent);
+    padding: 0.5em 1em 0.2em;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    box-shadow: 0 0 0 2px var(--color-accent), 2px 2px 6px rgba(0, 0, 0, 0.5);
+}
+
 
 body {
     font-size: 1rem;
     line-height: 1.5rem;
-    color: rgb(255 255 255 / 1);
-    background-color: rgb(0 0 0 / 1);
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: var(--font-default);
+
+    @apply bg-surface text-on-surface dark:bg-page dark:text-on-page;
 }
 
 /* Customize the scrollbar track */
 ::-webkit-scrollbar {
-    width: 12px; /* Width of the scrollbar */
-    height: 12px; /* Height of the scrollbar (for horizontal scroll) */
+    width: 1rem; /* Width of the scrollbar */
+    height: 1rem; /* Height of the scrollbar (for horizontal scroll) */
 }
 
 /* Customize the scrollbar thumb (the draggable part) */
 ::-webkit-scrollbar-thumb {
-    background-color: #d32f2f; /* A red shade for the thumb */
+    background-color: var(--color-accent); /* A red shade for the thumb */
     border-radius: 6px; /* Rounded corners */
-    border: 3px solid #000000; /* Adds padding around the thumb */
+    border: 3px solid var(--color-page); /* Adds padding around the thumb */
 }
 
 /* Customize the scrollbar track (the background area) */
 ::-webkit-scrollbar-track {
-    background: #2c2c2c; /* A dark background */
+    background: var(--color-page); /* A dark background */
     border-radius: 6px;
 }
 
 /* Optional: Hover state for the scrollbar thumb */
 ::-webkit-scrollbar-thumb:hover {
-    background: #b71c1c; /* Slightly darker shade of red when hovered */
+    background: var(--color-accent-hover); /* Slightly darker shade of red when hovered */
 }
+

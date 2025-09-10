@@ -1,5 +1,3 @@
-import Image from 'next/image';
-
 import { PageSection } from '@/src/components/page-section';
 import { PageWrapper } from '@/src/components/page-wrapper';
 
@@ -21,11 +19,11 @@ export default function AboutPage() {
                 </div>
 
                 <img
-                    src="./images/humbuggery/Grand+Banquet+Placemat+.jpg"
+                    src="/images/humbuggery/Grand+Banquet+Placemat+.jpg"
                     alt="Grand Banquet Placemat"
-                    className="w-full pb-12"
+                    className="border-accent w-full border p-4"
                 />
-                <div className="mb-4 grid grid-cols-3 gap-4">
+                <div className="mb-4 grid grid-cols-2 gap-4 lg:grid-cols-3">
                     {[
                         '1+Furlong.jpg',
                         '2+Owens.jpeg',
@@ -81,12 +79,10 @@ export default function AboutPage() {
                         '56+Boland.jpg',
                         '57+boody.png',
                     ].map((image) => (
-                        <Image
+                        <img
                             key={image}
-                            src={`./images/humbuggery/${image}`}
-                            className="aspect-square w-full object-cover"
-                            width={0}
-                            height={0}
+                            src={`/images/humbuggery/${image}`}
+                            className="border-accent aspect-square w-full border object-cover p-4"
                             alt={image}
                         />
                     ))}

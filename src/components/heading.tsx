@@ -115,7 +115,7 @@ const resolveWeightClass = ({ light, normal, bold }: TypographyProps, defaultVal
 };
 
 const resolveColorClass = ({ red, black, white }: TypographyProps, defaultValue: string = 'text-white'): string => {
-    if (red) return 'text-red-500';
+    if (red) return 'text-accent';
     if (black) return 'text-black';
     if (white) return 'text-white';
     return defaultValue;

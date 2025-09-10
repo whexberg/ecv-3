@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import Link from 'next/link';
 import { MouseEventHandler, PropsWithChildren } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 type LinkProps = { onClick?: MouseEventHandler; href: string; link: true; blankTarget?: boolean };
 type BtnProps = { onClick: MouseEventHandler; href?: string; link?: false };
@@ -8,21 +9,25 @@ type MainProps = { className?: string; disabled?: boolean; rounded?: boolean };
 
 export type ButtonProps = PropsWithChildren<MainProps & (LinkProps | BtnProps)>;
 
-export function Button({ disabled, rounded, children, ...props }: ButtonProps) {
-    const classes = clsx(
-        disabled ? 'cursor-not-allowed' : 'cursor-pointer',
-        rounded ? 'rounded-full' : 'rounded',
-        'bg-red-800',
-        'focus-visible:outline',
-        'focus-visible:outline-2',
-        'focus-visible:outline-offset-2',
-        'focus-visible:outline-red-700',
-        'font-semibold',
-        'hover:bg-red-700',
-        'px-3.5',
-        'py-2',
-        'shadow-sm',
-        'text-sm',
+export function Button({ disabled, rounded, children, className, ...props }: ButtonProps) {
+    const classes = twMerge(
+        clsx(
+            disabled ? 'cursor-not-allowed' : 'cursor-pointer',
+            rounded ? 'rounded-full' : 'rounded',
+            'bg-accent',
+            'text-on-accent',
+            'focus-visible:outline',
+            'focus-visible:outline-2',
+            'focus-visible:outline-offset-2',
+            'focus-visible:outline-accent',
+            'font-semibold',
+            'hover:bg-accent-hover',
+            'px-3.5',
+            'py-2',
+            'shadow-sm',
+            'text-sm',
+            className,
+        ),
     );
 
     return props.link ? (

@@ -40,12 +40,12 @@ export const parseMDX = async <T extends Record<string, unknown>>(source: string
                 </p>
             ),
             CQA: (props) => (
-                <p className="my-4 text-red-700" {...props}>
+                <p className="text-accent my-4" {...props}>
                     CREDO QUIA ABSURDUM
                 </p>
             ),
             FYIK: (props) => (
-                <p className="my-4 font-bold text-red-700" {...props}>
+                <p className="text-accent my-4 font-bold" {...props}>
                     FYIK
                 </p>
             ),
@@ -54,7 +54,7 @@ export const parseMDX = async <T extends Record<string, unknown>>(source: string
                     <p className="text-3xl" {...props}>
                         WHAT SAY THE BRETHREN!
                     </p>
-                    <p className="text-red-700" {...props}>
+                    <p className="text-accent" {...props}>
                         FYIK
                     </p>
                     <p {...props}>{'"CREDO QUIA ABSURDUM"'}</p>

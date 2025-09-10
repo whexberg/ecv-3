@@ -1,11 +1,14 @@
-import { getDatabase } from '@/src/lib/database/db';
+import { Kysely } from 'kysely';
+
+import { DBUtils } from '@/src/lib/database/db';
 import { EncodedBoardMember } from '@/src/lib/models/board-member';
+
+import { DB } from './db-types';
 
 export const BoardMembersRepo = {
     getAll: async (): Promise<EncodedBoardMember[]> => {
-        const db = getDatabase();
-        const result = await db.query(`SELECT *
-                                       FROM board_members`);
-        return result.rows as EncodedBoardMember[];
+        const db: Kysely<DB> = DBUtils.getDB();
+        const result = await db.selectFrom('board_members').selectAll().execute();
+        return result.map((row) => row) as EncodedBoardMember[];
     },
 };

@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import { useEffect, useState } from 'react';
 
-import { DateUtils } from '@/src/lib/utils/dates';
+import { DateTimeUtils } from '@/src/lib/models/datetimes';
 
 type TimeLeft = {
     days: number;
@@ -16,11 +16,11 @@ type CountdownTimerProps = {
 };
 
 const CountdownTimer = (props: CountdownTimerProps) => {
-    const [timeLeft, setTimeLeft] = useState<TimeLeft>(DateUtils.getTimeUntil(props.target));
+    const [timeLeft, setTimeLeft] = useState<TimeLeft>(DateTimeUtils.getTimeUntil(props.target));
 
     useEffect(() => {
         const interval = setInterval(() => {
-            const tl = DateUtils.getTimeUntil(props.target);
+            const tl = DateTimeUtils.getTimeUntil(props.target);
             if (tl.days <= 0 && tl.hours <= 0 && tl.minutes <= 0 && tl.seconds <= 0) {
                 props.onCountdownEnd?.();
             }

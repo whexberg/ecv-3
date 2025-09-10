@@ -1,26 +1,59 @@
-import { Pool, PoolClient } from 'pg';
+import { Kysely, PostgresDialect } from 'kysely';
+import * as pg from 'pg';
+import { parseIntoClientConfig } from 'pg-connection-string';
 
-const pool = new Pool({
-    user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD,
-    host: process.env.DATABASE_HOST,
-    database: process.env.DATABASE_NAME,
-    ssl: false,
+import { DB } from './db-types';
 
-    // connectionString,
-    // Optional: Add connection pool settings
-    max: 20,
-    idleTimeoutMillis: 30000,
-    connectionTimeoutMillis: 2000,
-});
+const TIMESTAMP_OID = 1114;
+const TIMESTAMPTZ_OID = 1184;
+const DATE_OID = 1082;
 
-export const getDatabase = (): Pool => pool;
+pg.types.setTypeParser(TIMESTAMP_OID, (val) => val);
+pg.types.setTypeParser(TIMESTAMPTZ_OID, (val) => val);
+pg.types.setTypeParser(DATE_OID, (val) => val);
 
-export const closeDatabase = async (): Promise<void> => {
-    await pool.end();
+let db: Kysely<DB>;
+
+export const getDB = ({
+    // host = process.env.DATABASE_HOST,
+    // ssl = false,
+    database = process.env.DATABASE_NAME,
+    password = process.env.DATABASE_PASSWORD,
+    port = process.env.DATABASE_PORT ? parseInt(process.env.DATABASE_PORT) : 5432,
+    user = process.env.DATABASE_USER,
+}: {
+    user?: string;
+    password?: string;
+    host?: string;
+    database?: string;
+    port?: number;
+    ssl?: boolean;
+} = {}) => {
+    console.log(database, password, port, user);
+    db ??= new Kysely<DB>({
+        dialect: new PostgresDialect({
+            pool: new pg.Pool(
+                parseIntoClientConfig(`postgres://${user}:${password}@postgres:${port}/${database}?sslmode=disable`),
+            ),
+        }),
+        // dialect: new PostgresDialect({
+        //     pool: new pg.Pool({
+        //         database,
+        //         host,
+        //         password,
+        //         port,
+        //         user,
+        //         ssl,
+        //         max: 20,
+        //         idleTimeoutMillis: 30000,
+        //         connectionTimeoutMillis: 2000,
+        //     }),
+        // }),
+    });
+
+    return db;
 };
 
-// Helper function to get a client from the pool
-export const getClient = async (): Promise<PoolClient> => {
-    return await pool.connect();
+export const DBUtils = {
+    getDB,
 };

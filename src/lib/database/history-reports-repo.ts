@@ -1,21 +1,27 @@
-import { getDatabase } from '@/src/lib/database/db';
+import { Kysely, Selectable } from 'kysely';
+
+import { DBUtils } from '@/src/lib/database/db';
 import { EncodedHistoryReport } from '@/src/lib/models/history-report';
+
+import { DB } from './db-types';
 
 export const HistoryReportsRepo = {
     getAll: async (): Promise<EncodedHistoryReport[]> => {
-        const db = getDatabase();
-        const result = await db.query(`SELECT * FROM history_reports`);
-        return result.rows.map((row: EncodedHistoryReport) => {
-            row.date = (row.date as unknown as Date)?.toISOString().split('T')[0];
-            return row;
+        const db: Kysely<DB> = DBUtils.getDB();
+        const result = await db.selectFrom('history_reports').selectAll().execute();
+        return result.map((row: Selectable<DB['history_reports']>) => {
+            if (row.date == null) return row as EncodedHistoryReport;
+            return row as EncodedHistoryReport;
         });
     },
     getById: async (id: string): Promise<EncodedHistoryReport> => {
-        const db = getDatabase();
-        const result = await db.query(`SELECT * FROM history_reports WHERE id = $1 LIMIT 1`, [id]);
-        return result.rows.map((row: EncodedHistoryReport) => {
-            row.date = (row.date as unknown as Date)?.toISOString().split('T')[0];
-            return row;
-        })[0] as EncodedHistoryReport;
+        const db: Kysely<DB> = DBUtils.getDB();
+        const result = await db
+            .selectFrom('history_reports')
+            .selectAll()
+            .where('id', '=', id)
+            .limit(1)
+            .executeTakeFirst();
+        return result as EncodedHistoryReport;
     },
 };

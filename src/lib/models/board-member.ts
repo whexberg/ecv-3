@@ -3,6 +3,7 @@ export type EncodedBoardMember = {
     name?: string;
     image?: string;
     position?: string;
+    label?: string;
     created_at?: string;
     updated_at?: string;
 };
@@ -12,6 +13,7 @@ export type IBoardMember = {
     name: string;
     image: string;
     position: string;
+    label: string;
     createdAt: string;
     updatedAt: string;
 };
@@ -21,6 +23,7 @@ export class BoardMember implements IBoardMember {
     name: string;
     image: string;
     position: string;
+    label: string;
     createdAt: string;
     updatedAt: string;
 
@@ -29,6 +32,7 @@ export class BoardMember implements IBoardMember {
         this.name = d.name;
         this.image = d.image;
         this.position = d.position;
+        this.label = d.label;
         this.createdAt = d.createdAt;
         this.updatedAt = d.updatedAt;
     }
@@ -39,6 +43,7 @@ export class BoardMember implements IBoardMember {
             name: d?.name ?? '',
             image: d?.image ?? '',
             position: d?.position ?? '',
+            label: d?.label ?? '',
             createdAt: d?.created_at ?? '',
             updatedAt: d?.updated_at ?? '',
         });
@@ -50,6 +55,7 @@ export class BoardMember implements IBoardMember {
             name: this.name,
             image: this.image,
             position: this.position,
+            label: this.label,
             created_at: this.createdAt,
             updated_at: this.updatedAt,
         };

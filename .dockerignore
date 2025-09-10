@@ -5,6 +5,6 @@ conf/nginx/           # We'll create this directory soon
 .git/
 .gitignore
 .dockerignore
-Dockerfile
-docker-compose.yml
+docker/Dockerfile
+docker/docker-compose.yml
 node_modules/         # Installed inside container

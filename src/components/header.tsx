@@ -1,12 +1,8 @@
 'use client';
 
-import { Noto_Sans } from 'next/font/google';
+import clsx from 'clsx';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-
-import { Heading, Subheading } from '@/src/components/heading';
-
-const notoSans = Noto_Sans({ weight: ['400', '500', '600', '700', '800'], subsets: ['latin'] });
 
 const links = [
     { href: '/', text: 'Home' },
@@ -18,8 +14,8 @@ const links = [
 
 export const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const openMenu = () => setIsOpen(true);
     const closeMenu = () => setIsOpen(false);
+    const toggleMenu = () => setIsOpen((p) => !p);
 
     useEffect(() => {
         if (isOpen) document.body.classList.add('overflow-hidden');
@@ -28,71 +24,68 @@ export const Header = () => {
     }, [isOpen]);
 
     return (
-        <header className="bg-red-800 text-white">
-            <div className="container mx-auto flex items-center justify-between px-4">
-                <Link href="/public" className="p-4">
-                    <Heading left xlarge>
-                        Lord Sholto Douglas
-                    </Heading>
-                    <Subheading left large>
-                        ECV Chapter #3
-                    </Subheading>
-                </Link>
+        <nav className="bg-surface dark:bg-page shadow-card mb-1 font-serif">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div className="flex h-16 items-center justify-between">
+                    <div className="flex-shrink-0">
+                        <span className="stamp text-xs sm:text-base">LORD SHOLTO DOUGLAS #3</span>
+                    </div>
 
-                <nav className="hidden lg:flex">
-                    <ul className="flex items-center justify-center gap-8 px-6 font-semibold" style={notoSans.style}>
+                    {/*<Button*/}
+                    {/*    onClick={() => {*/}
+                    {/*        document.documentElement.classList.toggle('dark');*/}
+                    {/*    }}*/}
+                    {/*>*/}
+                    {/*    Switch Theme*/}
+                    {/*</Button>*/}
+
+                    <div className="hidden space-x-4 text-sm font-bold tracking-wide uppercase lg:flex">
                         {links.map(({ href, text }) => (
-                            <li key={href}>
-                                <Link href={href} className="hover:underline">
-                                    {text}
-                                </Link>
-                            </li>
+                            <Link
+                                key={href + text}
+                                href={href}
+                                className="text-on-surface dark:text-on-page hover:text-accent group relative block py-2 tracking-widest uppercase"
+                                onClick={closeMenu}
+                            >
+                                {text}
+                                <span className="absolute bottom-1 left-0 hidden h-0.5 w-0 bg-current transition-all duration-300 ease-in-out group-hover:w-full lg:block" />
+                            </Link>
                         ))}
-                    </ul>
-                </nav>
+                    </div>
 
-                {/* Hamburger Icon */}
-                <button
-                    onClick={openMenu}
-                    className="z-40 flex h-10 w-10 cursor-pointer flex-col items-center justify-center gap-1 lg:hidden"
-                    aria-label="Toggle Menu"
-                >
-                    <span className="block h-1 w-6 bg-white" />
-                    <span className="block h-1 w-6 bg-white" />
-                    <span className="block h-1 w-6 bg-white" />
-                </button>
+                    {/*Mobile menu button*/}
+                    <div className="lg:hidden">
+                        <button onClick={toggleMenu} className="text-on-surface hover:text-accent focus:outline-none">
+                            <svg
+                                className="h-6 w-6"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                viewBox="0 0 24 24"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            >
+                                <path d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
             </div>
 
-            {/* Side Menu */}
-            <div
-                className={`fixed top-0 right-0 z-50 h-full w-64 transform bg-red-800 text-white transition-transform duration-300 ${
-                    isOpen ? 'translate-x-0' : 'translate-x-full'
-                }`}
-            >
-                <button
-                    onClick={closeMenu}
-                    className="flex h-10 w-10 flex-col items-center justify-center gap-1 rounded-md text-white focus:outline-none"
-                    aria-label="Toggle Menu"
-                >
-                    <span className={`block h-1 w-6 translate-y-2 rotate-45 bg-white transition-transform`} />
-                    <span className={`block h-1 w-6 bg-white opacity-0 transition-opacity`} />
-                    <span className={`block h-1 w-6 -translate-y-2 -rotate-45 bg-white transition-transform`} />
-                </button>
-                <nav className="mt-16">
-                    <ul className="flex flex-col space-y-4 px-6">
-                        {links.map(({ href, text }) => (
-                            <li key={href}>
-                                <Link href={href} className="hover:underline" onClick={closeMenu}>
-                                    {text}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                </nav>
-            </div>
+            {/* Mobile Menu */}
 
-            {/* Background Overlay */}
-            {isOpen && <div onClick={closeMenu} className="fixed inset-0 z-40 bg-black/50"></div>}
-        </header>
+            <div className={clsx(isOpen || 'hidden', 'space-y-3 p-4 text-sm font-bold lg:hidden')}>
+                {links.map(({ href, text }) => (
+                    <Link
+                        key={href + text}
+                        href={href}
+                        className="text-on-surface dark:text-on-page hover:bg-accent hover:text-on-accent group relative block p-4 py-2 pb-[-1rem] tracking-widest uppercase"
+                        onClick={() => closeMenu()}
+                    >
+                        {text}
+                    </Link>
+                ))}
+            </div>
+        </nav>
     );
 };

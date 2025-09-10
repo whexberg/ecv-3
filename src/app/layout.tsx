@@ -1,22 +1,11 @@
 import './globals.css';
 
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
 import React, { PropsWithChildren } from 'react';
 
 import { Footer } from '@/src/components/footer';
 import { Header } from '@/src/components/header';
 import { MainContent } from '@/src/components/main-content';
-
-const geistSans = Geist({
-    variable: '--font-geist-sans',
-    subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-    variable: '--font-geist-mono',
-    subsets: ['latin'],
-});
 
 export const metadata: Metadata = {
     title: 'Lord Sholto Douglas | ECV #3',
@@ -65,12 +54,10 @@ export default function RootLayout({ children }: PropsWithChildren) {
                 />
             </head>
 
-            <body className={`${geistSans.variable} ${geistMono.variable}`}>
-                <div className="flex min-h-screen flex-col antialiased">
-                    <Header />
-                    <MainContent>{children}</MainContent>
-                    <Footer />
-                </div>
+            <body className="flex min-h-screen flex-col overflow-y-scroll antialiased">
+                <Header />
+                <MainContent>{children}</MainContent>
+                <Footer />
             </body>
         </html>
     );

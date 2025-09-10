@@ -1,6 +1,5 @@
-import { PropsWithChildren } from 'react';
-
-import { Heading, Subheading } from '@/src/components/heading';
+import clsx from 'clsx';
+import React, { PropsWithChildren } from 'react';
 
 type PageSectionProps = PropsWithChildren<{
     id?: string;
@@ -12,21 +11,17 @@ type PageSectionProps = PropsWithChildren<{
 
 export function PageSection({ id, heading, subheading, narrow, children }: PageSectionProps) {
     return (
-        <div id={id} className={`${narrow ? 'max-w-7xl' : 'container'} mx-auto px-4 sm:px-6 lg:px-8`}>
-            <div className="mb-20">
-                {heading && (
-                    <Heading xxlarge bold center>
-                        {heading}
-                    </Heading>
-                )}
-                {subheading && (
-                    <Subheading xlarge bold center>
-                        {subheading}
-                    </Subheading>
-                )}
+        <section
+            id={id}
+            className="dark:bg-page bg-surface text-on-surface dark:text-on-page relative w-full px-4 py-18 md:px-16"
+            // className="mx-auto max-w-5xl md:px-8"
+        >
+            <div className="relative mx-auto mb-10 text-center">
+                <h1 className="font-serif text-4xl font-bold tracking-wide drop-shadow-lg md:text-6xl">{heading}</h1>
+                <h3 className="font-display mx-auto mt-4 max-w-2xl text-lg font-medium md:text-2xl">{subheading}</h3>
             </div>
 
-            {narrow ? <div className="mx-auto max-w-3xl">{children}</div> : children}
-        </div>
+            <div className={clsx(narrow && 'mx-auto max-w-3xl', 'flex flex-col gap-4')}>{children}</div>
+        </section>
     );
 }

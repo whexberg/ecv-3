@@ -10,18 +10,10 @@ export default function PlaquesPage() {
                 plaques, please send them to me and I will post them on our website.
             </p>
 
-            <p>
-                <a href="Applegate.JPG">The Esoteric Fraternity [Applegate]</a>
-            </p>
-            <p>
-                <a href="DSCF0059.JPG">Barrett&apos;s Store [Horseshoe Bar]</a>
-            </p>
-            <p>
-                <a href="railhead.jpg">The Railhead [Colfax]</a>
-            </p>
-            <p>
-                <a href="murphys.jpg">Murphy&apos;s Saloon [Colfax]</a>
-            </p>
+            <p>The Esoteric Fraternity [Applegate]</p>
+            <p>Barrett&apos;s Store [Horseshoe Bar]</p>
+            <p>The Railhead [Colfax]</p>
+            <p>Murphy&apos;s Saloon [Colfax]</p>
             <p>Schuyler Colfax [Colfax]</p>
             <p>Old four fingers [Foresthill]</p>
             <p>Shanghai Saloon [Auburn]</p>

@@ -1,0 +1,20 @@
+# syntax=docker/dockerfile:1
+
+# =========================
+# Base image
+# =========================
+FROM node:24-alpine AS base
+WORKDIR /app
+
+COPY package*.json ./
+
+# =========================
+# Development Stage
+# =========================
+FROM base AS dev
+
+RUN npm install
+COPY . .
+
+# Start Next.js in dev mode (with HMR)
+CMD npm run dev

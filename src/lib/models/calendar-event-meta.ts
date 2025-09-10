@@ -1,61 +1,47 @@
-export interface EncodedCalendarEventMeta {
-    links?: Array<{ url: string; text: string }>;
-    recurrence?: string;
-    start_date_tbd?: boolean;
-    start_time_tbd?: boolean;
-    end_date_tbd?: boolean;
-    end_time_tbd?: boolean;
-    is_all_day?: boolean;
-}
+import { Deserialized, Serializable, Serialized } from '@/src/lib/models/map-types';
 
 export interface ICalendarEventMeta {
-    links: Array<{ url: string; text: string }>;
-    recurrence: string;
-    startDateTBD: boolean;
-    startTimeTBD: boolean;
-    endDateTBD: boolean;
-    endTimeTBD: boolean;
-    isAllDay: boolean;
+    links: Serializable<Array<{ url: string; text: string }>>;
+    startDateTBD: Serializable<boolean, 'start_date_tbd'>;
+    startTimeTBD: Serializable<boolean, 'start_time_tbd'>;
+    endDateTBD: Serializable<boolean, 'end_date_tbd'>;
+    endTimeTBD: Serializable<boolean, 'end_time_tbd'>;
 }
 
-export class CalendarEventMeta implements ICalendarEventMeta {
-    links: Array<{ url: string; text: string }>;
-    recurrence: string;
-    startDateTBD: boolean;
-    startTimeTBD: boolean;
-    endDateTBD: boolean;
-    endTimeTBD: boolean;
-    isAllDay: boolean;
+export class CalendarEventMeta implements Deserialized<ICalendarEventMeta> {
+    public links: Array<{ url: string; text: string }>;
+    public startDateTBD: boolean;
+    public startTimeTBD: boolean;
+    public endDateTBD: boolean;
+    public endTimeTBD: boolean;
 
-    constructor(props: ICalendarEventMeta) {
+    constructor(props: Deserialized<ICalendarEventMeta>) {
         this.links = props.links;
-        this.recurrence = props.recurrence;
         this.startDateTBD = props.startDateTBD;
         this.startTimeTBD = props.startTimeTBD;
         this.endDateTBD = props.endDateTBD;
         this.endTimeTBD = props.endTimeTBD;
-        this.isAllDay = props.isAllDay;
     }
 
-    static deserialize = (d?: EncodedCalendarEventMeta): CalendarEventMeta => {
-        return new CalendarEventMeta({
-            links: d?.links ?? [],
-            recurrence: d?.recurrence ?? '',
-            startDateTBD: d?.start_date_tbd ?? false,
-            startTimeTBD: d?.start_time_tbd ?? false,
-            endDateTBD: d?.end_date_tbd ?? false,
-            endTimeTBD: d?.end_time_tbd ?? false,
-            isAllDay: d?.is_all_day ?? false,
-        });
+    public static deserialize = (d: Serialized<ICalendarEventMeta>): CalendarEventMeta => {
+        const values: Deserialized<ICalendarEventMeta> = {
+            links: d.links,
+            startDateTBD: d.start_date_tbd,
+            startTimeTBD: d.start_time_tbd,
+            endDateTBD: d.end_date_tbd,
+            endTimeTBD: d.end_time_tbd,
+        };
+
+        return new CalendarEventMeta(values);
     };
 
-    public serialize = (): EncodedCalendarEventMeta => ({
-        links: this.links,
-        recurrence: this.recurrence,
-        start_date_tbd: this.startDateTBD,
-        start_time_tbd: this.startTimeTBD,
-        end_date_tbd: this.endDateTBD,
-        end_time_tbd: this.endTimeTBD,
-        is_all_day: this.isAllDay,
-    });
+    public serialize = (): Serialized<ICalendarEventMeta> => {
+        return {
+            links: this.links,
+            start_date_tbd: this.startDateTBD,
+            start_time_tbd: this.startTimeTBD,
+            end_date_tbd: this.endDateTBD,
+            end_time_tbd: this.endTimeTBD,
+        };
+    };
 }
