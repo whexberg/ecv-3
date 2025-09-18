@@ -69,75 +69,64 @@ export default function Home() {
             </PageSection>
 
             <PageSection heading="Upcoming Events" id="events">
-                {/*
-                <div className="mx-auto mt-8 flex basis-1/2 flex-col justify-center gap-4">
-                    <h3 className="font-display text-center text-4xl">LSD3 Gentleman&apos;s Initiation</h3>
-                    <div className="mx-auto mt-4 flex max-w-7xl flex-col-reverse items-center gap-4 xl:grid xl:grid-cols-2 xl:gap-12">
+                <div className="mx-auto mt-28 flex basis-1/2 flex-col justify-center gap-4">
+                    <h3 className="font-display m-4 text-center text-4xl" id="sushi-night">
+                        Sushi Night Fundraiser!
+                    </h3>
+
+                    <div className="mx-auto mt-4 flex max-w-7xl flex-col-reverse items-center gap-4 xl:grid xl:grid-cols-2 xl:flex-row xl:gap-12">
                         <div className="flex flex-col gap-4">
-                            <div className="text-center">August 23, 6030</div>
-                            <div className="text-center">Everybody&apos;s Inn, Foresthill, CA</div>
-                            <div className="text-center">Starting at 10:03am sharp-ish on Saturday, August 23</div>
-                            <div className="text-center text-lg">Brothers of the Crimson!</div>
-                            <div>
-                                The stars have realigned, the jackasses have nodded in approval, and the ancient tin
-                                cups have clinked: it’s time for a Gentlemen’s Initiation of Epic Proportions!
+                            <h4 className="font-display text-center text-2xl">Join us for boatloads of sushi</h4>
+
+                            <div className="flex justify-center">
+                                <Button link href="https://link.clover.com/urlshortener/jmF7QP">
+                                    Get your seats!
+                                </Button>
                             </div>
-                            <div>
-                                This ain’t your grandpappy’s uphill-both-ways ordeal—this is for the seasoned, the
-                                battle-worn, the distinguished gents who want to earn their redshirt but aren’t quite
-                                ready for a full-blown death march. Join us for a day of ritual, revelry, and
-                                respectable ridiculousness as we bring our brothers into the fold with all the honor and
-                                half the hazard.
-                            </div>
-                            <div>
-                                Brush off your finest sense of humor, pack a flask of something that burns just right,
-                                and prepare for an initiation that’s as unforgettable as it is slightly more
-                                orthopedic-friendly.
-                            </div>
-                            <div>Adventure awaits—and so does your rightful place among the brethren!</div>
 
                             <ul>
-                                <li>Directions:</li>
-                                <li>
-                                    <ul className="list-disc pl-10">
-                                        <li>Take I-80 to Auburn</li>
-                                        <li>Exit 121 for Foresthill Rd.</li>
-                                        <li>
-                                            Follow the road for a bit, and you&apos;ll see Everybody&apos;s Inn on the
-                                            right hand side!
-                                        </li>
-                                        <li>(Or follow the sound of laughter and chaos.)</li>
-                                        <li>We&apos;ll see you there!</li>
-                                    </ul>
-                                </li>
-                                <li></li>
+                                <li className="text-accent text-center">7pm, October 10th, 2025</li>
+                                <li className="text-accent text-center">7330 Fair Oaks Blvd</li>
+                                <li className="text-accent text-center">$65 per person</li>
                             </ul>
+
+                            <div>
+                                Roll on down with your fellow Redshirts, family, and friends for a night of feasting and
+                                fun! We’re laying out Boatloads of fresh sushi along with crowd-pleasing appetizers —
+                                calamari, jalapeño bombs, flaming mushrooms, and edamame. Water and soda are on the
+                                house; adult beverages and other extras are yours to snag at the bar.
+                            </div>
+
+                            <div>
+                                Only the first <span className="font-bold">40 souls who prepay</span> will claim their
+                                spots at the table — after that, the sign-up disappears like a lost miner’s stash. This
+                                is a <span className="font-bold">fundraiser</span>, so no refunds (your gold dust goes
+                                to a good cause).
+                            </div>
+
+                            <div>
+                                We&apos;ll spice it up with a <span className="font-bold">50/50 raffle</span> and a few
+                                <span className="font-bold"> secret door prizes</span> worthy of the Order. Bring your
+                                kin, your friends, and your appetite — it’s going to be a legendary ECV evening!
+                            </div>
+                            <div className="mt-8 flex justify-center">
+                                <Button link href="https://link.clover.com/urlshortener/jmF7QP">
+                                    Get your seats!
+                                </Button>
+                            </div>
                         </div>
                         <div>
                             <img
-                                src="/images/events/6030_gentlemans_initiation.jpeg"
-                                alt="Lord Sholto Douglas Family Campout 2025"
+                                src="/images/events/shogun-sushi/boats.jpg"
+                                alt="Boatloads of Sushi"
                                 className="border-accent shadow-card mx-auto max-w-1/2 border p-4 lg:max-w-full"
                             />
                         </div>
                     </div>
-                    <div className="border-accent text-accent mt-8 border p-4 text-center">
-                        <div className="text-center">Just a friendly reminder about the rub:</div>
-                        <div className="text-center">Red Shirts $10</div>
-                        <div className="text-center">PBC&apos;s: $103</div>
-                    </div>
-                    <div className="flex justify-center">
-                        <Button link href="https://link.clover.com/urlshortener/pCnbDz" blankTarget>
-                            Pay your rub, now!
-                        </Button>
-                    </div>
                 </div>
-                */}
 
                 <div className="mx-auto mt-28 flex basis-1/2 flex-col justify-center gap-4">
-                    <Link href="https://fb.me/1PWX6gal4IZIIjR" target="_blank">
-                        <h3 className="font-display text-center text-4xl">Fall Doins 6030</h3>
-                    </Link>
+                    <h3 className="font-display text-center text-4xl">Fall Doins 6030</h3>
 
                     <div className="mx-auto mt-4 flex max-w-7xl flex-col items-center gap-4 xl:grid xl:grid-cols-2 xl:gap-12">
                         <div>

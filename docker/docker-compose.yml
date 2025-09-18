@@ -5,8 +5,6 @@ services:
     build:
       context: ..
       dockerfile: ./docker/Dockerfile
-      target: ${TARGET:-prod}
-    profiles: [ "dev", "prod" ]
     env_file:
       - ${ENV_FILE:-../.env}
     networks:
@@ -16,24 +14,22 @@ services:
 
   postgres:
     image: postgres:17
-    profiles: [ "prod" ]
-    restart: always
-    ports:
-      - '5432:5432'
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${DATABASE_USER} -d ${DATABASE_NAME}" ]
       interval: 10s
       retries: 5
+    ports:
+      - '5432:5432'
     environment:
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_DB: ${DATABASE_NAME}
-    networks:
-      - app-network
     env_file:
       - ${ENV_FILE:-../.env}
     volumes:
       - pg_data:/var/lib/postgresql/data
+    networks:
+      - app-network
 
   migrate:
     image: migrate/migrate

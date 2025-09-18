@@ -1,15 +1,34 @@
 'use client';
 
+import { el } from '@faker-js/faker';
+import { DateTime } from 'luxon';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 import { Button } from '@/src/components/button';
+import CountdownTimer from '@/src/components/countdown';
 import { PageSection } from '@/src/components/page-section';
 import { PageWrapper } from '@/src/components/page-wrapper';
 
+const cutoff = DateTime.fromObject({ year: 2025, month: 9, day: 18 });
+
 export default function SpringDoins6030() {
     const router = useRouter();
+    const [prepayExpired, setPrepayExpired] = useState<boolean>(false);
+
+    const onCountdownEnd = () => setPrepayExpired(true);
+
+    const onPrepayClicked = () => {
+        if (prepayExpired) alert(`Prepay ended at midnight, ${cutoff.toFormat('LLL dd yyyy')}`);
+        else router.push('https://link.clover.com/urlshortener/Pbyppt');
+    };
+
+    useEffect(() => {
+        if (DateTime.now() > cutoff) setPrepayExpired(true);
+    }, []);
+
     return (
         <PageWrapper>
             <PageSection heading="Fall Doins 6030" narrow>
@@ -46,7 +65,7 @@ export default function SpringDoins6030() {
                         The <span className="text-accent font-semibold">Pre-Pay Portal to Pecuniary Salvation</span>{' '}
                         slams shut at the stroke of midnight on the{' '}
                         <span className="decoration-accent underline decoration-dotted">
-                            17th day of September, in the year of our Clamp, 2025
+                            18th day of September, in the year of our Clamp, 6030 (2025)
                         </span>
                         .
                     </p>
@@ -69,14 +88,13 @@ export default function SpringDoins6030() {
                         </p>
                         <p className="text-accent text-center italic">So sayeth the Ancient Order of Empty Pockets.</p>
                     </div>
+
                     <div className="flex justify-center text-white">
-                        <Button
-                            onClick={() => {
-                                router.push('https://link.clover.com/urlshortener/Pbyppt');
-                            }}
-                        >
-                            Pre Pay Now!
-                        </Button>
+                        Prepay {!prepayExpired ? 'expires in ' : 'expired '}
+                        {!prepayExpired && <CountdownTimer target={cutoff} onCountdownEnd={onCountdownEnd} />}
+                    </div>
+                    <div className="flex justify-center text-white">
+                        {!prepayExpired && <Button onClick={onPrepayClicked}>Pre Pay Now!</Button>}
                     </div>
                 </div>
             </PageSection>

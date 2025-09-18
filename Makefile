@@ -217,7 +217,7 @@ nginx-test: ## Test nginx configuration
 
 PROD_FILES=-f ./docker/docker-compose.yml
 PROD_DOCKER_ARGS=$(PROD_FILES) --profile prod --env-file .env
-DEV_FILES=$(PROD_FILES) -f ./docker/docke-compose.dev.yml
+DEV_FILES=-f ./docker/docker-compose.dev.yml
 DEV_DOCKER_ARGS=$(DEV_FILES) --profile dev --env-file .env
 
 dev-build:
