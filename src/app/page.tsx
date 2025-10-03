@@ -71,6 +71,106 @@ export default function Home() {
             <PageSection heading="Upcoming Events" id="events">
                 <div className="mx-auto mt-28 flex basis-1/2 flex-col justify-center gap-4">
                     <h3 className="font-display m-4 text-center text-4xl" id="sushi-night">
+                        6030 Widders Ball
+                    </h3>
+
+                    <div className="mx-auto mt-4 flex max-w-7xl flex-col-reverse items-center gap-4 xl:grid xl:grid-cols-2 xl:flex-row xl:gap-12">
+                        <div className="flex flex-col gap-4">
+                            <div className="flex justify-center">
+                                <Button link href="https://link.clover.com/urlshortener/qr87HP">
+                                    Prepay now
+                                </Button>
+                            </div>
+
+                            <p>
+                                Brothers, family, and friends — the Widders’ Ball returns for{' '}
+                                <strong>2025 (C.Y. 6030)</strong>! Join us for an evening of merriment, music, and
+                                fellowship in true Clamper spirit. Dust off your finest redshirt attire, polish your
+                                dancing shoes, and prepare for a night filled with laughter, revelry, and the
+                                camaraderie that makes our Order unique.
+                            </p>
+
+                            <p>
+                                We’ll celebrate our history, honor our widders, and make memories that will carry us
+                                well into the new Clamp year. Whether you come for the dancing, the stories, or the
+                                company — there’s a seat at our table for you.
+                            </p>
+
+                            <dl className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                <div>
+                                    <dt className="text-xs text-gray-500">When</dt>
+                                    <dd className="font-medium">Saturday, November 8th, 2025</dd>
+                                    <dd className="font-medium">7:03pm - 11:03pm</dd>
+                                </div>
+                                <div>
+                                    <dt className="text-xs text-gray-500">Where</dt>
+                                    <dd className="font-medium">American Legion Post84</dd>
+                                    <dd className="font-medium">100 East St. Auburn, CA</dd>
+                                </div>
+                            </dl>
+
+                            <div className="mt-8 flex justify-center">
+                                <Button link href="https://link.clover.com/urlshortener/qr87HP">
+                                    Prepay now
+                                </Button>
+                            </div>
+                        </div>
+                        <div className="border-accent shadow-card mx-auto flex max-w-1/2 flex-col gap-4 border p-4 lg:max-w-full">
+                            <img src="/images/events/6030/widders-ball-flyer/1.png" alt="Widders Ball Flyer Page 1" />
+                            <img src="/images/events/6030/widders-ball-flyer/2.png" alt="Widders Ball Flyer Page 2" />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="mx-auto mt-28 flex basis-1/2 flex-col justify-center gap-4">
+                    <h3 className="font-display text-center text-4xl">Fall Doins 6030</h3>
+
+                    <div className="mx-auto mt-4 flex max-w-7xl flex-col items-center gap-4 xl:grid xl:grid-cols-2 xl:gap-12">
+                        <div>
+                            <img
+                                src="/images/events/fall-doins-6030.png"
+                                alt="Lord Sholto Douglas Family Campout 2025"
+                                className="border-accent shadow-card mx-auto max-w-1/2 border p-4 lg:max-w-full"
+                            />
+                        </div>
+                        <div className="flex flex-col gap-4">
+                            <div className="text-center">September 19-21, 6030 | Foresthill, CA</div>
+
+                            <div>
+                                <strong>Brothers!</strong> Have ye grown weary of the mundane world of logic and
+                                sobriety? The legendary <strong>Fall Doins of Lord Sholto Douglas Chapter #3</strong> is
+                                upon us! Gather your gear, your Goldust, and your finest ridiculous hat for three days
+                                of legendary nonsense in the pines of Foresthill!
+                            </div>
+
+                            <div>
+                                What awaits you? $5 chip night Friday, hearty breakfasts that could feed a donkey, The
+                                Lady Bug Saloon flowing with cold beer and hot lies, cornhole & horseshoes with 50/50
+                                stakes, and enough absurdity to make your head spin. PBCs beware—the Hangman BugMan is
+                                hungry for your soul!
+                            </div>
+
+                            <div>
+                                ⚠️ Pre-pay deadline: September 17th at midnight! First 100 pre-pays get exclusive
+                                patches & pins. Don&apos;t let the Pre-Pay Portal to Pecuniary Salvation slam shut on
+                                you!
+                            </div>
+
+                            <div className="text-center">Credo Quia Absurdum. Come get yours in Foresthill.</div>
+                        </div>
+                    </div>
+
+                    <div className="mt-8 flex justify-center">
+                        <Button link href="/events/6030-fall-doins">
+                            Learn More & Pre-Pay NOW!
+                        </Button>
+                    </div>
+                </div>
+            </PageSection>
+
+            <PageSection heading="Upcoming Events" id="events">
+                <div className="mx-auto mt-28 flex basis-1/2 flex-col justify-center gap-4">
+                    <h3 className="font-display m-4 text-center text-4xl" id="sushi-night">
                         Sushi Night Fundraiser!
                     </h3>
 
