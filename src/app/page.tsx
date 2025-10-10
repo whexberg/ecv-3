@@ -70,6 +70,63 @@ export default function Home() {
 
             <PageSection heading="Upcoming Events" id="events">
                 <div className="mx-auto mt-28 flex basis-1/2 flex-col justify-center gap-4">
+                    <h3 className="font-display m-4 mb-0 text-center text-4xl">Pickelhaube Raffle</h3>
+                    <h4 className="font-display m-4 mt-0 text-center text-xl">
+                        Win a Genuine WWII Bavarian Pickelhaube!
+                    </h4>
+
+                    <div className="mx-auto mt-4 flex max-w-7xl flex-col items-center gap-4 xl:gap-12">
+                        <div className="flex flex-col gap-4">
+                            <p>
+                                This Clampyear, we&apos;re raffling off a true piece of history — an authentic WWII
+                                Bavarian Pickelhaube helmet! Only 300 tickets are available, and they&apos;re going
+                                fast.
+                            </p>
+                            <p>
+                                All proceeds go to support Lord Sholto Douglas #3 chapter events and community efforts.
+                                Get your ticket before they&apos;re gone — and may the Redshirts smile upon your luck!
+                            </p>
+
+                            <div className="mt-8 flex justify-center">
+                                <Button link href="https://link.clover.com/urlshortener/xskgp9">
+                                    Buy tickets now
+                                </Button>
+                            </div>
+
+                            <dl className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                                <div>
+                                    <dt className="text-xs text-gray-500">How much are tickets?</dt>
+                                    <dd className="font-medium">$20 each</dd>
+                                </div>
+                                <div>
+                                    <dt className="text-xs text-gray-500">When is the drawing?</dt>
+                                    <dd className="font-medium">Once all tickets are sold</dd>
+                                </div>
+                                <div>
+                                    <dt className="text-xs text-gray-500">What if I&apos;m not there?</dt>
+                                    <dd className="font-medium">
+                                        You do not need to be present to win. We&apos;ll contact you after the drawing!
+                                    </dd>
+                                </div>
+                            </dl>
+                        </div>
+                        <div className="border-accent shadow-card mx-auto flex w-fit flex-wrap justify-center gap-4 border p-4">
+                            {[
+                                '/images/events/6030/raffle/pickelhaube/91d48a31-64f3-47e8-bf5e-9ba1397c2a87.jpeg',
+                                '/images/events/6030/raffle/pickelhaube/766034ae-f7f5-4fa3-8b27-9d0772bc51d3.jpeg',
+                                '/images/events/6030/raffle/pickelhaube/ea3682a9-f817-4b36-9188-fe649cfa4cf3.jpeg',
+                            ].map((link, idx) => (
+                                <div className="w-[250px]" key={link}>
+                                    <Link href={link}>
+                                        <img src={link} alt={`Pickelhaube picture ${idx}`} className="w-full" />
+                                    </Link>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                <div className="mx-auto mt-28 flex basis-1/2 flex-col justify-center gap-4">
                     <h3 className="font-display m-4 text-center text-4xl" id="sushi-night">
                         6030 Widders Ball
                     </h3>
@@ -166,9 +223,7 @@ export default function Home() {
                         </Button>
                     </div>
                 </div>
-            </PageSection>
 
-            <PageSection heading="Upcoming Events" id="events">
                 <div className="mx-auto mt-28 flex basis-1/2 flex-col justify-center gap-4">
                     <h3 className="font-display m-4 text-center text-4xl" id="sushi-night">
                         Sushi Night Fundraiser!
