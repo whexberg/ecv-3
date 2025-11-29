@@ -1,0 +1,15 @@
+api:
+  dashboard: true
+
+entryPoints:
+  web:
+    address: ":80"
+
+log:
+  level: INFO
+  format: common
+
+providers:
+  docker:
+    exposedByDefault: false
+    network: app-network

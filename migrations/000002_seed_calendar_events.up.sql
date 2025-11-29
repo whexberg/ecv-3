@@ -14,7 +14,7 @@ VALUES ('0f18fc61-c828-478b-8ec2-5239bd1b1cd3', 'Board Meeting', 'Monthly board 
 INSERT INTO calendar_events (id, title, description, location, start_datetime, end_datetime)
 VALUES ('6ae11dc1-6f48-456e-a32e-a96f6bdd0251', 'Bean Feed',
         'The 43rd Annual Bean Feed and Hawkers Faire will be held at 1273 High Street, Auburn, CA. Cost: $40 at the door.',
-        '1273 High Street, Auburn, CA.', '2025-02-08 07:03:00.000', '2025-02-08 16:03:00.000');
+        '1273 High Street, Auburn, CA.', '2025-02-07 07:03:00.000', '2025-02-07 16:03:00.000');
 
 INSERT INTO calendar_events (id, title, description, location, start_datetime, end_datetime, meta)
 VALUES ('bb63b259-8c5c-4c65-ac61-5626cdd38a50', 'Spring Doins', 'The Return to Foresthill!', 'Foresthill',
@@ -78,12 +78,10 @@ VALUES ('c54cd3f4-9d2e-494b-9539-1ed9b6823cf2', 'Election Night', '2026-01-16 20
         '2026-01-16 21:03:00.000');
 
 INSERT INTO calendar_events (id, title, start_datetime, end_datetime)
-VALUES ('a4534035-9286-4d22-974b-e86d17bd4cc2', 'Bean Feed', '2026-02-21 07:03:00.000',
-        '2026-02-21 15:03:00.000');
+VALUES ('a4534035-9286-4d22-974b-e86d17bd4cc2', 'Bean Feed', '2026-02-07 07:03:00.000', '2026-02-07 15:03:00.000');
 
 INSERT INTO calendar_events (id, title, start_datetime, end_datetime)
-VALUES ('a6795046-f3bd-43ab-abe3-a380a1e42c94', 'Spring Doins', '2026-04-17 07:03:00.000',
-        '2026-04-19 15:03:00.000');
+VALUES ('a6795046-f3bd-43ab-abe3-a380a1e42c94', 'Spring Doins', '2026-04-17 07:03:00.000', '2026-04-19 15:03:00.000');
 
 INSERT INTO calendar_events (id, title, description, location, start_datetime, end_datetime)
 VALUES ('471ad577-0343-4a88-beb1-fc27246dc288', 'LSD3 Gentleman''s Initiation',

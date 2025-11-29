@@ -1,0 +1,18 @@
+services:
+  traefik:
+    image: traefik:v3.1
+    container_name: traefik
+    command:
+      - "--configFile=/traefik/traefik.dev.yml"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ../traefik/traefik.dev.yml:/traefik/traefik.dev.yml:ro
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    external: true

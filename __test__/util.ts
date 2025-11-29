@@ -1,9 +1,9 @@
 import { faker } from '@faker-js/faker';
 import { DateTime } from 'luxon';
 
-import { ICalendarEventsRepository } from '@/src/lib/calendar-events/repository';
-import { CalendarEvent } from '@/src/lib/models/calendar-event';
-import { CalendarEventMeta } from '@/src/lib/models/calendar-event-meta';
+import { ICalendarEventsRepository } from '@/lib/calendar-events/repository';
+import { CalendarEvent } from '@/lib/models/calendar-event';
+import { CalendarEventMeta } from '@/lib/models/calendar-event-meta';
 
 type EventType = 'meeting' | 'doins' | 'picnic' | 'ceremony' | 'social' | 'fundraiser' | 'historical' | 'other';
 

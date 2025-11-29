@@ -1,0 +1,62 @@
+name: lsd3-website-dev
+
+services:
+  db:
+    image: mariadb:11
+    container_name: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wpuser
+      MYSQL_PASSWORD: wppassword
+    networks:
+      - app-network
+    volumes:
+      - wordpress_db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  wordpress:
+    build:
+      context: ../..
+      dockerfile: docker/wp/Dockerfile
+    container_name: wordpress
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_PASSWORD: wppassword
+      WORDPRESS_DB_USER: wpuser
+      WP_ADMIN_EMAIL: "admin@lordsholtodouglas.com"
+      WP_ADMIN_PASSWORD: "secure_password_123"
+      WP_ADMIN_USER: "admin"
+      WP_TITLE: "Lord Sholto Douglas Website"
+      WP_URL: "http://wp.lordsholtodouglas.localhost"
+    networks:
+      - app-network
+    volumes:
+      - wordpress_data:/var/www/html
+      - wordpress_wp_content:/var/www/html/wp-content
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.wordpress.rule=Host(`wp.lordsholtodouglas.localhost`)"
+      - "traefik.http.routers.wordpress.entrypoints=web"
+      - "traefik.http.routers.wordpress.service=wordpress"
+      - "traefik.http.services.wordpress.loadbalancer.server.port=80"
+
+networks:
+  app-network:
+    external: true
+
+volumes:
+  wordpress_db_data:
+  wordpress_data:
+  wordpress_wp_content:

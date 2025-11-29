@@ -1,0 +1,21 @@
+certificatesResolvers:
+  le:
+    acme:
+      email: whexberg@gmail.com
+      storage: /letsencrypt/acme.json
+      httpChallenge:
+        entryPoint: web
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+  websecure:
+    address: ":443"
+providers:
+  docker:
+    exposedByDefault: false
+    network: app-network
