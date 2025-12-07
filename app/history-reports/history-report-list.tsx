@@ -1,8 +1,8 @@
 'use client';
 
 import { BlogCard } from '@/app/history-reports/blog-card';
-import { useHistoryReports } from '@/app/history-reports/history-reports.context';
 import { Loader } from '@/components/loader';
+import { useHistoryReports } from '@/lib/history-report/context';
 
 export const HistoryReportList = () => {
     const { historyReports: posts, initialized } = useHistoryReports();

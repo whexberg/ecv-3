@@ -16,9 +16,16 @@ const eslintConfig = [
     ...compat.extends('next/core-web-vitals', 'next/typescript'),
     prettier,
     {
+        files: ['**/*.{ts,tsx}'],
         plugins: {
             prettier: prettierPlugin,
             'simple-import-sort': simpleImportSort,
+        },
+        languageOptions: {
+            parserOptions: {
+                project: './tsconfig.json',
+                tsconfigRootDir: __dirname,
+            },
         },
         rules: {
             'prettier/prettier': 'error',
@@ -26,9 +33,23 @@ const eslintConfig = [
             'simple-import-sort/exports': 'error',
 
             '@next/next/no-img-element': 'off',
+
+            '@typescript-eslint/switch-exhaustiveness-check': 'error',
+            '@typescript-eslint/no-unused-vars': [
+                'error',
+                {
+                    "args": "all",
+                    "argsIgnorePattern": "^_",
+                    "caughtErrors": "all",
+                    "caughtErrorsIgnorePattern": "^_",
+                    "destructuredArrayIgnorePattern": "^_",
+                    "varsIgnorePattern": "^_",
+                    "ignoreRestSiblings": true
+                },
+            ],
         },
     },
-    { ignores: ['node_modules', 'lib/clover.sdk.js', '.next'] },
+    { ignores: ['node_modules', 'lib/clover.sdk.js', 'lib/generated', '.next'] },
 ];
 
 export default eslintConfig;

@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { HistoryReportsRepo } from '@/lib/database/history-reports-repo';
+import { HistoryReportRepository } from '@/lib/history-report/repository';
 
-export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }): Promise<NextResponse> {
+export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }): Promise<NextResponse> {
     try {
         const { id } = await params;
-        const report = await HistoryReportsRepo.getById(id);
+        const report = await HistoryReportRepository.getById(id);
         return NextResponse.json(report);
     } catch (error) {
         console.error('Database error:', error);

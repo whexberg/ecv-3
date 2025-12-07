@@ -1,0 +1,17 @@
+*.tar
+*.zip
+.env*
+.git
+.gitignore
+.idea
+.next
+.notes
+backups
+certbot
+data
+docker-compose.dev.yml
+docker/traefik/acme.json
+next
+node_modules
+out
+README.md

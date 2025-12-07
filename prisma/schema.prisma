@@ -1,0 +1,190 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// =================================================
+//  Events
+// =================================================
+model Event {
+  id              String    @id @default(uuid())
+  title           String
+  description     String    @default("")
+  location        String    @default("")
+  start_at        DateTime?
+  end_at          DateTime?
+  all_day         Boolean   @default(false)
+  timezone        String    @default("America/Los_Angeles")
+  event_type      EventType @default(other)
+  is_members_only Boolean   @default(false)
+  is_published    Boolean   @default(false)
+  content         String    @default("")
+  meta            Json?
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @default(now()) @updatedAt
+
+  recurrences EventRecurrenceLink[]
+  contacts    EventContact[]
+  attachments EventAttachment[]
+  exceptions  RecurrenceException[]
+  additions   RecurrenceAddition[]
+
+  @@map("event")
+}
+
+model EventRecurrence {
+  id         String    @id @default(uuid())
+  label      String
+  rrule      String
+  start      DateTime
+  until      DateTime?
+  count      Int?
+  tzid       String
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now()) @updatedAt
+
+  events EventRecurrenceLink[]
+
+  @@map("event_recurrence")
+}
+
+model EventRecurrenceLink {
+  event_id      String
+  recurrence_id String
+
+  event      Event           @relation(fields: [event_id], references: [id], onDelete: Cascade)
+  recurrence EventRecurrence @relation(fields: [recurrence_id], references: [id], onDelete: Cascade)
+
+  @@id([event_id, recurrence_id])
+  @@map("event_recurrence_link")
+}
+
+model EventContact {
+  id         String   @id @default(uuid())
+  event      Event    @relation(fields: [event_id], references: [id], onDelete: Cascade)
+  event_id   String
+  name       String
+  email      String?
+  phone      String?
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  @@unique([event_id, email])
+  @@map("event_contact")
+}
+
+model EventAttachment {
+  id            String    @id @default(uuid())
+  event         Event     @relation(fields: [event_id], references: [id], onDelete: Cascade)
+  event_id      String
+  filename      String
+  file_url      String?
+  file_type     FileType?
+  description   String?
+  display_order Int       @default(0)
+  created_at    DateTime  @default(now())
+
+  @@map("event_attachment")
+}
+
+model RecurrenceException {
+  id       String   @id @default(uuid())
+  event    Event    @relation(fields: [event_id], references: [id], onDelete: Cascade)
+  event_id String
+  date     DateTime
+  reason   String   @default("")
+
+  @@unique([event_id, date])
+  @@map("recurrence_exception")
+}
+
+model RecurrenceAddition {
+  id       String   @id @default(uuid())
+  event    Event    @relation(fields: [event_id], references: [id], onDelete: Cascade)
+  event_id String
+  date     DateTime
+  reason   String   @default("")
+
+  @@unique([event_id, date])
+  @@map("recurrence_addition")
+}
+
+enum EventType {
+  meeting
+  doins
+  picnic
+  ceremony
+  social
+  fundraiser
+  historical
+  other
+
+  @@map("event_type")
+}
+
+enum FileType {
+  image
+  pdf
+  document
+  other
+
+  @@map("file_type")
+}
+
+// ======================================================
+//  HISTORY REPORTS
+// ======================================================
+model HistoryReport {
+  id         String                 @id @default(uuid())
+  title      String
+  author     String
+  date       DateTime?              @default(now())
+  body       String
+  created_at DateTime               @default(now())
+  updated_at DateTime               @default(now()) @updatedAt
+  tags       HistoryReportTagLink[]
+
+  @@map("history_report")
+}
+
+model Tag {
+  id   String @id @default(uuid())
+  name String @unique
+
+  reports HistoryReportTagLink[]
+
+  @@map("tag")
+}
+
+model HistoryReportTagLink {
+  report_id String
+  tag_id    String
+
+  report HistoryReport @relation(fields: [report_id], references: [id], onDelete: Cascade)
+  tag    Tag           @relation(fields: [tag_id], references: [id], onDelete: Cascade)
+
+  @@id([report_id, tag_id])
+  @@index([tag_id])
+  @@index([report_id])
+  @@map("history_report_tag_link")
+}
+
+// ======================================================
+//  BOARD MEMBERS
+// ======================================================
+
+model BoardMember {
+  id         String   @id @default(uuid())
+  name       String
+  position   String
+  label      String
+  image      String
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  @@map("board_member")
+}

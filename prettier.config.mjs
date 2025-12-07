@@ -11,6 +11,15 @@ const config = {
     tabWidth: 4,
     trailingComma: 'all',
     plugins: ['prettier-plugin-tailwindcss'],
+
+    overrides: [
+        {
+            files: './lib/validator.ts',
+            options: {
+                printWidth: 1000,
+            },
+        },
+    ],
 };
 
 export default config;

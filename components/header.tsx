@@ -2,7 +2,7 @@
 
 import clsx from 'clsx';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 const links = [
     { href: '/', text: 'Home' },
@@ -14,8 +14,8 @@ const links = [
 
 export const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const closeMenu = () => setIsOpen(false);
-    const toggleMenu = () => setIsOpen((p) => !p);
+    const closeMenu = useCallback(() => setIsOpen(false), []);
+    const toggleMenu = useCallback(() => setIsOpen((p) => !p), []);
 
     useEffect(() => {
         if (isOpen) document.body.classList.add('overflow-hidden');
@@ -24,11 +24,11 @@ export const Header = () => {
     }, [isOpen]);
 
     return (
-        <nav className="bg-surface dark:bg-page shadow-card mb-1 font-serif">
+        <nav className="bg-background shadow-card mb-1 font-serif">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="flex h-16 items-center justify-between">
                     <div className="flex-shrink-0">
-                        <span className="stamp text-xs sm:text-base">LORD SHOLTO DOUGLAS #3</span>
+                        <span className="stamp text-foreground text-xs sm:text-base">LORD SHOLTO DOUGLAS #3</span>
                     </div>
 
                     {/*<Button*/}

@@ -1,9 +1,11 @@
 -- Insert CalendarEvent data into calendar_events table
 
-INSERT INTO recurrence_rules (id, label, frequency, interval, by_day)
-VALUES ('41911e75-735c-42cf-a30e-9afc33afc9aa', '1st Friday', 'MONTHLY', 1, ARRAY ['1FR']);
-INSERT INTO recurrence_rules (id, label, frequency, interval, by_day)
+INSERT INTO EventRecurrence (id, label, rrule, tzid)
+VALUES ('41911e75-735c-42cf-a30e-9afc33afc9aa', '1st Friday', 'FREQ=MONTHLY;INTERVAL=1;BYDAY=1FR');
+INSERT INTO EventRecurrence (id, label, rrule, interval, by_day)
 VALUES ('825ee271-44bb-4b48-a77d-bd0f0ddd9369', '3rd Friday', 'MONTHLY', 1, ARRAY ['3FR']);
+INSERT INTO EventRecurrence (id, label, rrule, interval, by_month, by_day)
+VALUES ('c1b4210e-3c2f-416e-b332-2be8846af01e', '1st Saturday in December', 'YEARLY', 1, Array [12], ARRAY ['1SA']);
 
 INSERT INTO calendar_events (id, title, description, location, start_datetime, end_datetime, recurrence_rule_id)
 VALUES ('0f18fc61-c828-478b-8ec2-5239bd1b1cd3', 'Board Meeting', 'Monthly board meeting', 'Gold Hill Grange Hall',
@@ -60,9 +62,6 @@ VALUES ('3c5fc8f9-ff4a-4188-9df7-19b852edf7ee', 'Family Campout');
 INSERT INTO calendar_events (id, title, start_datetime, end_datetime)
 VALUES ('95f3516c-b139-40a8-bf8c-b1e258372a1a', 'Widder''s Ball', '2025-11-08 20:03:00.000',
         '2025-11-08 22:00:00.000');
-
-INSERT INTO recurrence_rules (id, label, frequency, interval, by_month, by_day)
-VALUES ('c1b4210e-3c2f-416e-b332-2be8846af01e', '1st Saturday in December', 'YEARLY', 1, Array [12], ARRAY ['1SA']);
 
 INSERT INTO calendar_events (id, title, description, location, start_datetime, recurrence_rule_id)
 VALUES ('025fed3c-614f-48bb-a283-858bebab94bc', 'Receiving Home Toy Drive',

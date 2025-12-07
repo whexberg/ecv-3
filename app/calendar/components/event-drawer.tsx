@@ -2,8 +2,10 @@
 
 import { Dialog, DialogPanel } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
+import { ReactNode, useEffect, useState } from 'react';
 
-import { CalendarEvent } from '@/lib/models/calendar-event';
+import { CalendarEvent } from '@/lib/calendar-events/models/calendar-event';
+import { parseMDX } from '@/lib/utils/mdx';
 
 type Props = {
     open: boolean;
@@ -12,6 +14,19 @@ type Props = {
 };
 
 export default function EventDrawer({ open, onClose, eventInfo }: Props) {
+    const [content, setContent] = useState<ReactNode>('');
+
+    useEffect(() => {
+        if (!eventInfo || !eventInfo.content) return setContent('');
+        parseMDX(eventInfo.content, {
+            li: (props) => (
+                <li className="ml-8" {...props}>
+                    {props.children}
+                </li>
+            ),
+        }).then(({ content }) => setContent(content));
+    }, [eventInfo]);
+
     return (
         <Dialog open={open} onClose={onClose} className="relative z-10">
             <div className="bg-page/95 fixed inset-0 transition-opacity" aria-hidden="true" />
@@ -50,11 +65,18 @@ export default function EventDrawer({ open, onClose, eventInfo }: Props) {
                                             </div>
                                             <div>
                                                 <dt className="text-sm font-medium sm:w-40 sm:shrink-0">When?</dt>
-                                                <dd className="mt-1 text-sm sm:col-span-2">{eventInfo?.timeRange()}</dd>
+                                                <dd className="mt-1 text-sm sm:col-span-2">{eventInfo?.timeRange}</dd>
                                             </div>
                                             <div>
                                                 <dt className="text-sm font-medium sm:w-40 sm:shrink-0">Location</dt>
                                                 <dd className="mt-1 text-sm sm:col-span-2">{eventInfo?.location}</dd>
+                                            </div>
+
+                                            <div>
+                                                <dt className="text-sm font-medium sm:w-40 sm:shrink-0">Content</dt>
+                                                <dd className="mt-1 list-outside list-disc text-sm sm:col-span-2">
+                                                    {content}
+                                                </dd>
                                             </div>
                                         </dl>
                                     </div>

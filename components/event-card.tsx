@@ -1,3 +1,3 @@
 export const EventCard = () => {
-    return <div>EVENT</div>
-}
+    return <div>EVENT</div>;
+};

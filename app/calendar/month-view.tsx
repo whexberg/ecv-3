@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { DateTime } from 'luxon';
 
 import { Loader } from '@/components/loader';
-import { CalendarEvent } from '@/lib/models/calendar-event';
+import { CalendarEvent } from '@/lib/calendar-events/models/calendar-event';
 
 type Props = {
     events: {
@@ -13,14 +13,15 @@ type Props = {
         isToday?: boolean;
         isSelected?: boolean;
     }[];
-    selectedDate: DateTime | null;
-    onDateSelected: (dt: DateTime | null) => void;
+    selectedDate: DateTime;
+    onDateSelected: (dt: DateTime) => void;
     onEventSelected: (e: CalendarEvent) => void;
     loading?: boolean;
 };
 
 export function CalendarMonthView(props: Props) {
     if (props.loading) return <Loader />;
+
     return (
         <>
             <div className="lg:flex lg:flex-auto lg:flex-col">
@@ -49,10 +50,6 @@ export function CalendarMonthView(props: Props) {
                 </div>
 
                 {/* Calendar Days */}
-
-                {/*{props.loading ? (*/}
-                {/*    <Loader />*/}
-                {/*) : (*/}
                 <div className="flex text-xs/6 md:flex-auto">
                     {/* Desktop View */}
                     <div className="hidden w-full md:grid md:grid-cols-7 md:grid-rows-6 md:gap-px">
@@ -65,7 +62,7 @@ export function CalendarMonthView(props: Props) {
                                     'bg-surface',
                                     'dark:bg-page',
                                     'dark:text-on-page',
-                                    // 'group',
+                                    'min-h-28',
                                     'px-3',
                                     'py-2',
                                     'relative',
@@ -102,10 +99,10 @@ export function CalendarMonthView(props: Props) {
                                                     {event.title}
                                                 </p>
                                                 <time
-                                                    dateTime={event.startDateTime?.toISODate() ?? undefined}
+                                                    dateTime={event.startAt?.toISODate() ?? undefined}
                                                     className="group-hover:text-accent dark:group-hover:text-accent ml-3 hidden flex-none text-gray-500 xl:block dark:text-gray-400"
                                                 >
-                                                    {event.startDateTime?.toFormat('h:mma')}
+                                                    {event.startAt?.toFormat('h:mma')}
                                                 </time>
                                             </li>
                                         ))}
@@ -155,7 +152,7 @@ export function CalendarMonthView(props: Props) {
                                     'py-2',
                                     'relative',
                                 )}
-                                onClick={props.onDateSelected.bind(null, day.date)}
+                                onClick={() => props.onDateSelected(day.date)}
                             >
                                 <time
                                     dateTime={day.date.toISODate()!}
@@ -224,13 +221,15 @@ export function CalendarMonthView(props: Props) {
                             >
                                 <div className="flex-auto">
                                     <p className="text-on-accent font-semibold">{event.title}</p>
-                                    <time
-                                        dateTime={event.startDateTime!.toISOTime()!}
-                                        className="text-on-accent mt-2 flex items-center"
-                                    >
-                                        <ClockIcon aria-hidden="true" className="text-on-accent mr-2 size-5" />
-                                        {event.timeRange()}
-                                    </time>
+                                    {event.startAt && (
+                                        <time
+                                            dateTime={event.startAt.toISOTime()!}
+                                            className="text-on-accent mt-2 flex items-center"
+                                        >
+                                            <ClockIcon aria-hidden="true" className="text-on-accent mr-2 size-5" />
+                                            {event.timeRange}
+                                        </time>
+                                    )}
                                 </div>
                             </li>
                         ))}

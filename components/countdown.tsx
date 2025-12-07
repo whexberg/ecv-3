@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import { useEffect, useState } from 'react';
 
-import { DateTimeUtils } from '@/lib/models/datetimes';
+import { DateTimeUtils } from '@/lib/utils/date-time.utils';
 
 type TimeLeft = {
     days: number;

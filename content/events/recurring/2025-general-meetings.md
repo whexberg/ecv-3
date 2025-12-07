@@ -1,23 +1,25 @@
 ---
+id: fd06a14a-95ee-47f1-95d1-d09d7b7e4089
 title: General Meeting
+slug: general-meeting-2025
 description: Regular business meeting for all members
 location: 1405 Gold Hill Rd, Newcastle, Ca. 95658
 
-start_datetime: '2025-02-01T20:03:00'
-end_datetime: '2025-02-01T21:03:00'
+start_datetime: 2025-01-18T04:03:00Z
+end_datetime: 2025-01-18T05:03:00Z
 timezone: America/Los_Angeles
 all_day: false
 
 event_type: meeting
-is_members_only: true
+is_members_only: false
 is_published: true
 
 recurrence:
     label: Third Friday of the Month
     frequency: MONTHLY
     interval: 1
-    by_day: [3FR]
-    until: 2025-12-31
+    by_week_day: [FR]
+    by_set_position: [3]
     week_start: SU
 ---
 

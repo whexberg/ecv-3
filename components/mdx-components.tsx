@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ComponentProps, PropsWithChildren } from 'react';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const MDXComponents: Record<string, React.ComponentType<any>> = {
     // Custom heading with anchor links
     h1: ({ children, ...props }: PropsWithChildren<ComponentProps<'h1'>>) => (

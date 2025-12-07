@@ -1,6 +1,6 @@
-import { BoardMemberInfoProvider } from '@/app/board-members/board-member-info.context';
 import { PageSection } from '@/components/page-section';
 import { PageWrapper } from '@/components/page-wrapper';
+import { BoardMemberInfoProvider } from '@/lib/board-member/context';
 
 import { ImageCardGrid } from './image-card-grid';
 

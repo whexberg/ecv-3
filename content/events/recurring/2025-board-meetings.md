@@ -1,22 +1,23 @@
 ---
+id: 27a2d66b-1aeb-4d66-aa95-1412727db08b
 title: Board Meeting
+slug: board-meeting-2025
 location: 1405 Gold Hill Rd, Newcastle, Ca. 95658
 
-start_datetime: '2025-02-01T20:03:00'
-end_datetime: '2025-02-01T21:03:00'
+start_datetime: 2025-02-08T04:03:00Z
+end_datetime: 2025-02-08T05:03:00Z
 timezone: America/Los_Angeles
 all_day: false
 
 event_type: meeting
 is_members_only: false
 is_published: true
-
 recurrence:
     label: First Friday of the month
     frequency: MONTHLY
     interval: 1
-    by_day: [1FR]
-    until: 2025-12-31
+    by_week_day: [FR]
+    by_set_position: [1]
     week_start: SU
 ---
 

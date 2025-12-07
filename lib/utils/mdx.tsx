@@ -1,3 +1,4 @@
+import type { MDXProvider } from '@mdx-js/react';
 import { compileMDX } from 'next-mdx-remote/rsc';
 import { ReactNode } from 'react';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
@@ -8,7 +9,10 @@ import CustomImage from '@/components/custom-image';
 import { Text } from '@/components/heading';
 import Video from '@/components/video';
 
-export const parseMDX = async <T extends Record<string, unknown>>(source: string): Promise<{ content: ReactNode }> => {
+export const parseMDX = async <T extends Record<string, unknown>>(
+    source: string,
+    components?: React.ComponentProps<typeof MDXProvider>['components'],
+): Promise<{ content: ReactNode }> => {
     const { content } = await compileMDX<T>({
         source,
         components: {
@@ -39,6 +43,11 @@ export const parseMDX = async <T extends Record<string, unknown>>(source: string
                     {props.children}
                 </p>
             ),
+            ul: (props) => (
+                <ul className="list-outside list-disc" {...props}>
+                    {props.children}
+                </ul>
+            ),
             CQA: (props) => (
                 <p className="text-accent my-4" {...props}>
                     CREDO QUIA ABSURDUM
@@ -67,6 +76,7 @@ export const parseMDX = async <T extends Record<string, unknown>>(source: string
                     </Text>
                 </div>
             ),
+            ...components,
         },
         options: {
             parseFrontmatter: true,

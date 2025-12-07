@@ -5,11 +5,11 @@ import 'highlight.js/styles/github-dark.css';
 import { notFound } from 'next/navigation';
 import { use, useEffect, useState } from 'react';
 
-import { DateTimeUtils } from '@/lib/models/datetimes';
-import { HistoryReport } from '@/lib/models/history-report';
+import { HistoryReport } from '@/lib/history-report/history-report';
 import { parseMDX } from '@/lib/utils/mdx';
+import { deserialize } from '@/lib/utils/serialization';
 
-/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Props = { params: { slug: string } & any };
 
 export default function HistoryReportPage({ params }: Props) {
@@ -19,13 +19,14 @@ export default function HistoryReportPage({ params }: Props) {
 
     useEffect(() => {
         if (!slug) return;
+
         fetch(`/api/history-reports/${slug}`)
             .then((res) => res.json())
             .then(async (hp) => {
                 setInitialized(true);
                 if (hp.error) return;
                 hp.body = (await parseMDX(hp.body))?.content ?? '';
-                setPost(HistoryReport.deserialize(hp));
+                setPost(deserialize(hp, HistoryReport));
             })
             .catch(console.error);
     }, [slug]);
@@ -43,7 +44,7 @@ export default function HistoryReportPage({ params }: Props) {
                 <p className="tracking-normal">THE ANCIENT AND HONORABLE ORDER OF</p>
                 <p className="text-accent text-3xl font-bold tracking-[1rem]">E CLAMPUS VITUS</p>
                 <h1 className="text-xl">LORD SHOLTO DOUGLAS CHAPTER No. 3</h1>
-                <p className="text-accent text-center">{DateTimeUtils.getFormattedDate(post.date)}</p>
+                <p className="text-accent text-center">{post.date}</p>
             </div>
 
             <section className="text-center">{post.body}</section>

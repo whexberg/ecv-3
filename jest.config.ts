@@ -1,13 +1,13 @@
 import { readFileSync } from 'node:fs';
 
+import type { Config } from 'jest';
 import { createDefaultPreset, pathsToModuleNameMapper } from 'ts-jest';
 
 const tsconfig = JSON.parse(readFileSync('./tsconfig.json', 'utf-8'));
 
 const tsJestTransformCfg = createDefaultPreset().transform;
 
-/** @type {import('jest').Config} **/
-const config = {
+const config: Config = {
     testEnvironment: 'node',
     transform: { ...tsJestTransformCfg },
     moduleNameMapper: pathsToModuleNameMapper(

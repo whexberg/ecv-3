@@ -1,137 +1,188 @@
-import { DeleteResult, Insertable, Kysely } from 'kysely';
 import { DateTime } from 'luxon';
-import { ByWeekday, Options, RRule, WeekdayStr } from 'rrule';
-import { Weekday } from 'rrule';
+import { datetime, RRule, RRuleSet } from 'rrule';
 
-import { CalendarEvent, ICalendarEvent } from '@/lib/models/calendar-event';
-import { Serialized } from '@/lib/models/map-types';
-import { IRecurrenceRule, RecurrenceRule } from '@/lib/models/recurrence-rules';
+import { CalendarEvent } from '@/lib/calendar-events/models/calendar-event';
+import { EventType } from '@/lib/generated/prisma/client';
+import { Logger } from '@/lib/logger';
+import { prisma } from '@/lib/prisma-client';
+import { DateTimeUtils } from '@/lib/utils/date-time.utils';
+import { clone, deserialize, serialize } from '@/lib/utils/serialization';
 
-import { DB } from '../database/db-types';
-
-export type ICalendarEventsRepository = {
+export type IEventsRepository = {
     destroy: () => Promise<void>;
-    getEvents: () => Promise<CalendarEvent[]>;
+
     createEvent: (data: CalendarEvent) => Promise<CalendarEvent>;
-    deleteEvent: (id: string) => Promise<DeleteResult[]>;
+    getEvents: () => Promise<CalendarEvent[]>;
     getAllEventsInRange: (start: DateTime, end: DateTime) => Promise<CalendarEvent[]>;
     getEventById: (id: string) => Promise<CalendarEvent | undefined>;
     updateEvent: (id: string, data: CalendarEvent) => Promise<CalendarEvent>;
+    deleteEvent: (id: string) => Promise<CalendarEvent>;
 };
 
-export class CalendarEventsRepository implements ICalendarEventsRepository {
-    public constructor(private db: Kysely<DB>) {}
+export class EventsRepository implements IEventsRepository {
+    private db = prisma;
 
-    public destroy = async () => await this.db.destroy();
+    public destroy = async (): Promise<void> => {};
 
     public getEvents = async (): Promise<CalendarEvent[]> => {
-        return this.getAllEventsInRange(DateTime.utc().minus({ year: 1 }), DateTime.utc().plus({ year: 1 })).then();
+        return await this.getAllEventsInRange(DateTime.utc().minus({ year: 1 }), DateTime.utc().plus({ year: 1 }));
     };
 
     public createEvent = async (data: CalendarEvent): Promise<CalendarEvent> => {
-        const result = await this.db
-            .insertInto('calendar_events')
-            .values(data.serialize() as Insertable<DB['calendar_events']>)
-            .returningAll()
-            .executeTakeFirstOrThrow();
+        const result = await this.db.event.create({ data: serialize(data) });
 
-        return CalendarEvent.deserialize(result as Serialized<ICalendarEvent>);
+        return deserialize(result, CalendarEvent);
     };
-    public deleteEvent = async (id: string): Promise<DeleteResult[]> =>
-        await this.db.deleteFrom('calendar_events').where('id', '=', id).execute();
+
+    public deleteEvent = async (id: string): Promise<CalendarEvent> => {
+        const result = await this.db.event.delete({ where: { id } });
+        return deserialize(result, CalendarEvent);
+    };
 
     public getAllEventsInRange = async (
         rangeStart: DateTime<true>,
         rangeEnd: DateTime<true>,
     ): Promise<CalendarEvent[]> => {
-        const query = this.db
-            .selectFrom('calendar_events')
-            .leftJoin('recurrence_rules', 'recurrence_rules.id', 'calendar_events.recurrence_rule_id')
-            .select([
-                'calendar_events.id as event_id',
-                'calendar_events.created_at as event_created_at',
-                'calendar_events.updated_at as event_updated_at',
-                'recurrence_rules.id as recurrence_id',
-                'recurrence_rules.created_at as recurrence_created_at',
-                'recurrence_rules.updated_at as recurrence_updated_at',
-            ])
-            .selectAll('calendar_events')
-            .selectAll('recurrence_rules')
-            .where((eb) => {
-                const startDateTimeBeforeRangeEnd = eb('calendar_events.start_datetime', '<', rangeEnd.toISO());
-                const endDateTimeAfterRangeStart = eb('calendar_events.end_datetime', '>', rangeStart.toISO());
-                const rruleUntilAfterRangeStart = eb('recurrence_rules.until', '>', rangeStart.toISO());
-                return startDateTimeBeforeRangeEnd.and(endDateTimeAfterRangeStart.or(rruleUntilAfterRangeStart));
-            });
-        const result = await query.execute();
-
+        const result = await this.db.event.findMany({
+            where: {
+                is_published: true,
+                start_at: { not: null },
+                // OR: [
+                //     { start_at: { lte: rangeEnd.toISO() } },
+                //     { end_at: { gte: rangeStart.toISO() } },
+                //     {
+                //         OR: [
+                //             {
+                //                 recurrences: {
+                //                     some: {
+                //                         recurrence: {
+                //                             start: { lte: rangeEnd.toISO() },
+                //                             OR: [
+                //                                 { until: { gte: rangeStart.toISO() } }, //
+                //                                 { until: { equals: null } },
+                //                             ],
+                //                         },
+                //                     },
+                //                 },
+                //             },
+                //             {
+                //                 recurrences: {
+                //                     none: {},
+                //                 },
+                //             },
+                //         ],
+                //     },
+                // ],
+                // additions: { some: { date: { gt: rangeStart.toISO(), lt: rangeEnd.toISO() } } },
+                // exceptions: { some: { date: { gte: rangeStart.toISO(), lte: rangeEnd.toISO() } } },
+            },
+            include: {
+                additions: true,
+                exceptions: true,
+                recurrences: { include: { recurrence: true } },
+                // exceptions: { where: { date: { gte: rangeStart.toISO(), lte: rangeEnd.toISO() } } },
+                // recurrences: { include: { recurrence: true } },
+            },
+        });
         return result
-            .map((r) => {
-                const parentEvent = CalendarEvent.deserialize({
-                    ...r,
-                    id: r.event_id,
-                    created_at: r.event_created_at,
-                    updated_at: r.event_updated_at,
-                } as Serialized<ICalendarEvent>);
+            .map(({ recurrences, additions, exceptions, ...ev }): CalendarEvent[] => {
+                const original = deserialize(ev, CalendarEvent);
+                if (!original.startAt || !original.startAt.isValid || !original.endAt || !original.endAt.isValid)
+                    return [original];
 
-                if (!parentEvent.startDateTime) {
-                    console.warn("Event doesn't have a start date, skipping recurrence expansion", parentEvent);
-                    return parentEvent;
-                }
+                const events = [original];
+                if (recurrences && recurrences.length && original.startAt?.isValid && original.endAt?.isValid) {
+                    for (const { recurrence: r } of recurrences) {
+                        const diff = original.endAt.diff(original.startAt, 'seconds').seconds;
 
-                let events = [parentEvent];
-                if (r.recurrence_rule_id) {
-                    const rrule = RecurrenceRule.deserialize({
-                        ...r,
-                        id: r.recurrence_id,
-                        created_at: r.recurrence_created_at,
-                        updated_at: r.recurrence_updated_at,
-                    } as Serialized<IRecurrenceRule>);
+                        const rruleSet = new RRuleSet();
+                        const dtstart = DateTime.fromJSDate(r.start)
+                            .toJSDate()
+                            .toISOString()
+                            .replace(/.\d{3}Z/, 'Z')
+                            .replaceAll(/[-.:]/g, '');
+                        const rruleStr = `DTSTART:${dtstart};\nRRULE:${r.rrule}`;
+                        rruleSet.rrule(RRule.fromString(rruleStr));
 
-                    const rangeStart = r.start_datetime
-                        ? DateTime.fromSQL(r.start_datetime, { zone: r.timezone })
-                        : DateTime.utc().setZone(r.timezone).startOf('year');
-                    const rangeEnd = r.until
-                        ? DateTime.fromSQL(r.until, { zone: r.timezone })
-                        : rangeStart.plus({ year: 1 });
-                    // replace events with expanded parent event
-                    events = expandRecurringEvent(parentEvent, rrule, rangeStart, rangeEnd);
+                        for (const add of additions) {
+                            const dt = DateTime.fromJSDate(add.date);
+                            if (dt.isValid) {
+                                const { year, month, day, hour, minute, second } = dt.toObject();
+                                rruleSet.rdate(datetime(year, month, day, hour, minute, second));
+                            }
+                        }
+
+                        for (const ex of exceptions) {
+                            const dt = DateTime.fromJSDate(ex.date);
+                            if (dt.isValid) {
+                                const { year, month, day, hour, minute, second } = dt.toObject();
+                                rruleSet.exdate(new Date(year, month - 1, day, hour, minute, second));
+                            }
+                        }
+
+                        Logger.log({ rangeStart, rangeEnd });
+
+                        const expanded = rruleSet
+                            .between(rangeStart.toJSDate(), rangeEnd.toJSDate(), true)
+                            .map((dt) => {
+                                const dtStr = dt.toISOString();
+                                const opts = { zone: original.timezone, keepTime: true };
+                                const correctedStartTime = DateTimeUtils.parseDateTime(dtStr, opts);
+                                const correctedEndTime = correctedStartTime.plus({ seconds: diff });
+
+                                const generated: CalendarEvent = clone(original);
+                                generated.id = CalendarEvent.makeId(
+                                    original.id,
+                                    correctedEndTime.toObject(),
+                                    'occurrence',
+                                );
+                                generated.startAt = correctedStartTime;
+                                generated.endAt = correctedEndTime;
+                                return generated;
+                            });
+                        events.push(...expanded);
+                    }
                 }
 
                 return events.flatMap((e) => {
-                    if (!e.isMultiDay) return [e];
+                    if (e.startAt?.day != e.endAt?.day) return [e];
                     else return expandMultiDayEvent(e);
                 });
             })
-            .flat();
+            .flat()
+            .sort(CalendarEvent.compareFn)
+            .filter((e) => e.startAt && e.startAt.isValid && e.startAt <= rangeEnd && e.startAt >= rangeStart)
+            .map((e) => {
+                Logger.log(e.title, e.startAt, rangeStart);
+                return e;
+            });
     };
 
     public getEventById = async (id: string): Promise<CalendarEvent | undefined> => {
-        const result = await this.db.selectFrom('calendar_events').selectAll().where('id', '=', id).executeTakeFirst();
-        if (!result) return undefined;
-        return CalendarEvent.deserialize(result as Serialized<ICalendarEvent>);
+        const result = await this.db.event.findUnique({ where: { id } });
+        return result ? deserialize(result, CalendarEvent) : undefined;
     };
 
     public updateEvent = async (id: string, data: CalendarEvent): Promise<CalendarEvent> => {
-        const result = await this.db
-            .updateTable('calendar_events')
-            .set(data.serialize() as Insertable<DB['calendar_events']>)
-            .where('id', '=', id)
-            .returningAll()
-            .executeTakeFirstOrThrow();
-
-        return CalendarEvent.deserialize(result as Serialized<ICalendarEvent>);
+        const serialized = serialize(data);
+        const result = await this.db.event.update({
+            where: { id },
+            data: {
+                ...serialized,
+                event_type: serialized.event_type as EventType,
+                meta: JSON.stringify(serialized.meta),
+            },
+        });
+        return deserialize(result, CalendarEvent);
     };
 }
 
 function expandMultiDayEvent(parentEvent: CalendarEvent): CalendarEvent[] {
-    if (!parentEvent.startDateTime || !parentEvent.endDateTime) {
-        return [parentEvent];
-    }
+    if (!parentEvent.startAt || !parentEvent.endAt) return [parentEvent];
 
     // Ensure we're working with dates in the event's timezone
-    const startDate = parentEvent.startDateTime.setZone(parentEvent.timezone).startOf('day');
-    const endDate = parentEvent.endDateTime.setZone(parentEvent.timezone).startOf('day');
+    const startDate = parentEvent.startAt.setZone(parentEvent.timezone).startOf('day');
+    const endDate = parentEvent.endAt.setZone(parentEvent.timezone).startOf('day');
 
     // Calculate the number of days between start and end dates
     const daysDiff = endDate.diff(startDate, 'days').days;
@@ -147,101 +198,50 @@ function expandMultiDayEvent(parentEvent: CalendarEvent): CalendarEvent[] {
         const isFirstDay = i === 0;
         const isLastDay = i === daysDiff;
 
-        const dayEvent = parentEvent.clone({
+        const dayEvent = {
+            ...serialize(parentEvent),
             // Generate a unique ID for each day's event
             id: `${parentEvent.id}-day-${i}`,
             // Set the parent event ID to maintain relationship
-            parentEventId: parentEvent.id,
-        });
+            // parentEventId: parentEvent.id,
+        };
 
         // Set start and end times for each day's event
         if (isFirstDay) {
             // First day: Keep original start time, end at end of day
-            dayEvent.startDateTime = parentEvent.startDateTime;
-            dayEvent.endDateTime = currentDate.endOf('day');
+            dayEvent.start_at = startDate.toISO();
+            dayEvent.end_at = currentDate.endOf('day').toISO();
         } else if (isLastDay) {
             // Last day: Start at beginning of day, keep original end time
-            dayEvent.startDateTime = currentDate.startOf('day');
-            dayEvent.endDateTime = parentEvent.endDateTime;
+            dayEvent.start_at = currentDate.startOf('day').toISO();
+            dayEvent.end_at = endDate.toISO();
         } else {
             // Middle days: Full day events
-            dayEvent.startDateTime = currentDate.startOf('day');
-            dayEvent.endDateTime = currentDate.endOf('day');
-            dayEvent.isAllDay = true;
+            dayEvent.start_at = currentDate.startOf('day').toISO();
+            dayEvent.end_at = currentDate.endOf('day').toISO();
+            dayEvent.all_day = true;
         }
 
-        events.push(dayEvent);
+        events.push(deserialize(dayEvent, CalendarEvent));
     }
 
     return events;
 }
 
-function expandRecurringEvent(
-    parentEvent: CalendarEvent,
-    rule: RecurrenceRule,
-    rangeStart: DateTime,
-    rangeEnd: DateTime,
-): CalendarEvent[] {
-    const options: Partial<Options> = {
-        freq: rule.frequency ? RRule[rule.frequency as (typeof RRule.FREQUENCIES)[number]] : undefined,
-        interval: rule.interval || 1,
-        dtstart: rangeStart.toJSDate(),
-        until: rangeEnd.toJSDate(),
-        count: rule.count ?? null,
-        byweekday: rule.byDay
-            ? rule.byDay.map((d: string) => {
-                  // Convert "1FR" or "3MO" etc. to RRule.Day[]
-                  if (/^(MO|TU|WE|TH|FR|SA|SU)$/.exec(d)) return d as ByWeekday;
-
-                  const matches = d.match(/^(\d+)?(MO|TU|WE|TH|FR|SA|SU)$/);
-                  if (matches == null) throw new Error('Invalid weekday: ' + d);
-
-                  const [, num, str] = matches;
-                  const weekday = Weekday.fromStr(str as WeekdayStr);
-                  return num ? weekday.nth(Number(num)) : weekday;
-              })
-            : null,
-        bymonth: rule.byMonth || null,
-        bymonthday: rule.byMonthDay || null,
-        byhour: rule.byHour || null,
-        byminute: rule.byMinute || null,
-        bysecond: rule.bySecond || null,
-        bysetpos: rule.bySetPosition || null,
-        byweekno: rule.byWeekNumber || null,
-        byyearday: rule.byYearDay || null,
-    };
-
-    const dates = new RRule(options).between(rangeStart.toJSDate(), rangeEnd.toJSDate(), true);
-
-    return dates.map((dt) => {
-        const generated = parentEvent.clone();
-        if (parentEvent.startDateTime) {
-            generated.startDateTime = DateTime.fromJSDate(dt)
-                .setZone(parentEvent.timezone)
-                .set({
-                    year: dt.getUTCFullYear(),
-                    month: dt.getUTCMonth() + 1,
-                    day: dt.getUTCDate(),
-                    hour: parentEvent.startDateTime?.hour,
-                    minute: parentEvent.startDateTime?.minute,
-                    second: parentEvent.startDateTime?.second,
-                    millisecond: 0,
-                });
-        }
-        if (parentEvent.endDateTime) {
-            generated.endDateTime = DateTime.fromJSDate(dt)
-                .setZone(parentEvent.timezone)
-                .set({
-                    year: dt.getUTCFullYear(),
-                    month: dt.getUTCMonth() + 1,
-                    day: dt.getUTCDate(),
-                    hour: parentEvent.endDateTime?.hour,
-                    minute: parentEvent.endDateTime?.minute,
-                    second: parentEvent.endDateTime?.second,
-                    millisecond: 0,
-                });
-        }
-
-        return generated;
-    });
-}
+// function expandRecurringEvent(parent: CalendarEvent, rule: EventRecurrence, rangeStart: DateTime, rangeEnd: DateTime) {
+//     if (!parent.startAt?.isValid) throw new Error('Invalid parentEvent.startAt');
+//     if (!parent.endAt?.isValid) throw new Error('Invalid parentEvent.endAt');
+//
+//     const diff = parent.endAt.diff(parent.startAt, 'seconds').seconds;
+//     const dates = RRule.fromString(rule.rrule).between(rangeStart.toJSDate(), rangeEnd.toJSDate(), true);
+//     return dates.map((dt) => {
+//         const correctedStartTime = DateTimeUtils.parseDateTime(dt, { zone: parent.timezone, keepTime: true });
+//         const correctedEndTime = correctedStartTime.plus({ seconds: diff });
+//
+//         const generated: CalendarEvent = CalendarEvent.clone(parent);
+//         generated.id = CalendarEvent.makeId(parent.id, correctedEndTime.toObject(), 'occurrence');
+//         generated.startAt = correctedStartTime;
+//         generated.endAt = correctedEndTime;
+//         return generated;
+//     });
+// }

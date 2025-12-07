@@ -5,33 +5,39 @@ import { useState } from 'react';
 
 import EventDrawer from '@/app/calendar/components/event-drawer';
 import { CalendarHeader } from '@/app/calendar/components/header';
-import { useCalendarInfo } from '@/app/calendar/context';
 import { CalendarMonthView } from '@/app/calendar/month-view';
-import { CalendarEvent } from '@/lib/models/calendar-event';
+import { useCalendarInfo } from '@/lib/calendar-events/context';
+import { CalendarEvent } from '@/lib/calendar-events/models/calendar-event';
 
 export function CalendarView() {
-    const { events, getEventsByMonth, getEventsByYear, getEventsByDay, getEventsByWeek } = useCalendarInfo();
+    const {
+        events,
+        getEventsByDay,
+        getEventsByMonth,
+        getEventsByWeek,
+        getEventsByYear,
+        selectedDate,
+        setSelectedDate,
+    } = useCalendarInfo();
 
     const [currentDate, setCurrentDate] = useState<DateTime<true>>(DateTime.now());
-    const [selectedDate, setSelectedDate] = useState<DateTime | null>(DateTime.now());
+    // const [selectedDate, setSelectedDate] = useState<DateTime | null>(DateTime.now());
     const [drawerEvent, setDrawerEvent] = useState<CalendarEvent>();
     const [view, setView] = useState<'day' | 'week' | 'month' | 'year'>('month');
 
     const handleNextClicked = () => {
-        if (view === 'day') setCurrentDate((p) => p?.plus({ day: 1 }) ?? null);
-        if (view === 'week') setCurrentDate((p) => p?.plus({ week: 1 }) ?? null);
-        if (view === 'month') setCurrentDate((p) => p?.plus({ months: 1 }) ?? null);
-        if (view === 'year') setCurrentDate((p) => p?.plus({ years: 1 }) ?? null);
+        setCurrentDate(currentDate.plus({ [view]: 1 }).startOf(view));
+        setSelectedDate(selectedDate.plus({ [view]: 1 }).startOf(view));
     };
+
     const handlePrevClicked = () => {
-        if (view === 'day') setCurrentDate((p) => p?.minus({ day: 1 }) ?? null);
-        if (view === 'week') setCurrentDate((p) => p?.minus({ week: 1 }) ?? null);
-        if (view === 'month') setCurrentDate((p) => p?.minus({ months: 1 }) ?? null);
-        if (view === 'year') setCurrentDate((p) => p?.minus({ years: 1 }) ?? null);
+        setCurrentDate(currentDate.minus({ [view]: 1 }).startOf(view));
+        setSelectedDate(selectedDate.minus({ [view]: 1 }).startOf(view));
     };
+
     const handleTodayClicked = () => {
-        setCurrentDate(DateTime.now());
-        setSelectedDate(DateTime.now());
+        setCurrentDate(DateTime.local().startOf('day'));
+        setSelectedDate(DateTime.local().startOf('day'));
     };
 
     const ViewComponent = CalendarMonthView;
@@ -89,7 +95,7 @@ export function CalendarView() {
     calculatedEvents.unshift(...paddedDays);
 
     return (
-        <div className="mx-auto flex h-full max-w-7xl flex-col">
+        <div className="mx-auto flex h-full w-full max-w-7xl flex-col">
             <CalendarHeader
                 selectedDate={currentDate}
                 view={view}
@@ -108,7 +114,7 @@ export function CalendarView() {
             <EventDrawer
                 open={drawerEvent !== undefined}
                 onClose={() => setDrawerEvent(undefined)}
-                eventInfo={drawerEvent}
+                eventInfo={drawerEvent!}
             />
         </div>
     );

@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
 
-import { HistoryReportsRepo } from '@/lib/database/history-reports-repo';
+import { HistoryReportRepository } from '@/lib/history-report/repository';
 
 export async function POST(): Promise<NextResponse> {
     try {
-        const reports = await HistoryReportsRepo.getAll();
+        const reports = await HistoryReportRepository.getAll();
         return NextResponse.json(reports);
     } catch (error) {
         console.error('Database error:', error);

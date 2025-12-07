@@ -1,6 +1,6 @@
 'use client';
 
-import { useBoardMemberInfo } from '@/app/board-members/board-member-info.context';
+import { useBoardMemberInfo } from '@/lib/board-member/context';
 
 export const ImageCardGrid = () => {
     const { boardMembers } = useBoardMemberInfo();

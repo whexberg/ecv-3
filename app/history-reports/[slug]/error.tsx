@@ -10,23 +10,25 @@ export default function Error({ error, reset }: { error: Error; reset: () => voi
     }, [error]);
 
     return (
-        <main className="mx-auto min-h-screen max-w-lg bg-slate-200 px-4 py-1">
-            <h2 className="my-4 text-2xl font-bold">Something went wrong!</h2>
-            <button
-                className="bg-accent mb-4 rounded-xl p-4 text-white"
-                onClick={
-                    // Attempt to recover by trying to re-render the segment
-                    () => reset()
-                }
-            >
-                Try again
-            </button>
-            <p className="text-xl">
-                Or go back to{' '}
-                <Link href="/public" className="underline">
-                    Home 🏠
-                </Link>
-            </p>
-        </main>
+        <div className="flex w-full items-center justify-center">
+            <div>
+                <h2 className="my-4 text-2xl font-bold">Something went wrong!</h2>
+                <button
+                    className="bg-accent mb-4 rounded-xl p-4 text-white"
+                    onClick={
+                        // Attempt to recover by trying to re-render the segment
+                        () => reset()
+                    }
+                >
+                    Try again
+                </button>
+                <p className="text-xl">
+                    Or go back to{' '}
+                    <Link href="/" className="underline">
+                        Home 🏠
+                    </Link>
+                </p>
+            </div>
+        </div>
     );
 }

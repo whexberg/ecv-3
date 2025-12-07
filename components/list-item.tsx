@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { DateTimeUtils } from '@/lib/models/datetimes';
+import { DateTimeUtils } from '@/lib/utils/date-time.utils';
 
 type Props = {
     post: {
